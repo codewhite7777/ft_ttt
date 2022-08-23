@@ -1,3 +1,10 @@
+// state
+
+// cli -> server
+#define WAIT_FOR_OTHER  "001"
+#define RQT_CONNECT     "002"
+#define RQT_SET_POS     "003"
+#define RQT_TURN_OVER   "004"
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
@@ -73,7 +80,7 @@ int check_game_state(bool stone, int count)
         for (int j = 0 ; j < 3 ; ++j)
         {
             // cout << "here is now " << ' ' << i << ' ' << j  << '\n'; 
-            if ((i == 0 || j == 0) && board[i][j] == now)
+            if (board[i][j] == now)
             {
                 // cout << "in \n";
                 int cnt = 1;
@@ -129,16 +136,25 @@ const char * message2[3] = {
     "DRAW\n",
 };
 
-int main()
+bool nowState = 1;
+
+void	gameStart()
 {
-    bool stone = 0;
+	bool stone = 0;
     int count = 0;
     int flag;
     int y, x;
 
+	// Init game state
+
     while (true)
     {
-        // Input
+        
+		while (!nowState)
+		// recv받기 및 상태 변경
+		// randering
+			;
+		// Input
         Input(&y, &x);
 
         // check valid Input
@@ -157,6 +173,8 @@ int main()
                 visited[y - 1][x - 1] = 1;
                 ft_print_board(board);
 
+				// request mypos
+				
                 // Check game state
                 int ret = check_game_state(stone, count);
                 printf("Game State is: %d\n", ret);
@@ -171,11 +189,37 @@ int main()
             }
         }
     }
-
+	//request end
     if (flag == P1_WIN)
         printf("%s",message1[flag]);
     else if (flag == P2_WIN)
         printf("%s",message1[flag]);
     else
         printf("%s",message1[flag]);
+}
+
+int main()
+{
+	while (1)
+	{
+		int type;
+		printf("1. 접속하기\n");
+		printf("2. 끝내기\n");
+		printf("input:");
+		scanf("%d", &type);
+		while (type)
+		{
+		case 1:
+			// request;
+			//send
+			//recv
+			//gameStart(); game 로직 
+			break;
+		case 2:
+			break;
+		default:
+			printf("제대로 입력해^^\n");
+			break;
+		}
+	}
 }
