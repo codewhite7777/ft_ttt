@@ -24,7 +24,6 @@ int	main(void) {
 
 	memset(&s_info, 0x00, sizeof(s_info));
 	memset(&c_info, 0x00, sizeof(c_info));
-	ft_print_board(c_info.board);
 
 	// config_network()
 	retval = config_network(&s_info);
@@ -34,24 +33,28 @@ int	main(void) {
 		printf("connected with server\n");
 
 		// wait for starting
-		retval = recv(s_info.sock, c_info.buf, sizeof(c_info.buf), 0);
+		retval = recv(s_info.sock, (void *)s_info.recv_buf, sizeof(s_info.recv_buf), 0);
 		if (retval == -1)
 			printf("recv() failed\n");
-		if (strcmp(c_info.buf, "- - S") == 0) {
+		if (strcmp((char *)s_info.recv_buf, "- - S") == 0) {
 			printf("game start!\n");
 			// print default map
 			ft_print_board(c_info.board);
 		}
 
-		retval = recv(s_info.sock, c_info.buf, sizeof(c_info.buf), 0);
+		retval = recv(s_info.sock, s_info.recv_buf, sizeof(s_info.recv_buf), 0);
 		if (retval == -1)
 			printf("recv() failed\n");
 		printf("recv retval: [%d]\n", retval);
-		printf("buf: [%s]\n", c_info.buf);
-		if (strcmp(c_info.buf, "- - O") == 0)
+		printf("buf: [%s]\n", s_info.recv_buf);
+		if (strcmp((char *)s_info.recv_buf, "- - O") == 0) {
 			c_info.now_turn = TURN_O;
-		if (strcmp(c_info.buf, "- - X") == 0)
+			printf("turn: [O]\n");
+		}
+		if (strcmp((char *)s_info.recv_buf, "- - X") == 0) {
 			c_info.now_turn = TURN_X;
+			printf("turn: [X]\n");
+		}
 
 		if (c_info.now_turn == TURN_O) {
 			// input coordinate
