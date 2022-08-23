@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 05:19:25 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 05:22:34 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	ft_network(t_server *p_server)
     for (int i = 0; i < p_server->current_client; i++)
     {
         FD_SET(p_server->c_session[i].c_sock, &read_set);
-        // FD_SET(p_server->c_session[i].c_sock, &write_set);
+        FD_SET(p_server->c_session[i].c_sock, &write_set);
     }
 
     //set timeout
@@ -77,8 +77,8 @@ void	ft_network(t_server *p_server)
         {
             if (FD_ISSET(p_server->c_session[i].c_sock, &read_set))
                 recvPacket(p_server->c_session[i].c_sock, i, p_server);
-            // if (FD_ISSET(p_server->c_session[i].c_sock, &write_set) &&
-            // strlen((const char *)p_server->c_session[i].s_buf) > 0)
+            if (FD_ISSET(p_server->c_session[i].c_sock, &write_set) &&
+            strlen((const char *)p_server->c_session[i].s_buf) > 0)
                 sendPacket(p_server->c_session[i].c_sock, i, p_server);
         }
     }
