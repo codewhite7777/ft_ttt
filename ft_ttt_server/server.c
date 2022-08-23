@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 03:50:40 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 03:53:13 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void  accept_client(t_server *p_server)
     c_socklen = sizeof(c_addr_in);
     SOCKET  client_sock = accept(p_server->s_listen_sock, (struct sockaddr *)&c_addr_in, &c_socklen);
     printf("%d \n", client_sock);
-    if (p_server->current_client > 2)
+    if (p_server->current_client >= 2)
         close(client_sock);
     else
     {

@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:48:47 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 03:46:48 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 03:52:09 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ int	main(void)
 	while (1)
 	{
 		ft_network(&server);
-		// ft_tictactoe(&server);
-		// ft_disconnect(&server);
+		ft_tictactoe(&server);
+		ft_disconnect(&server);
 	}
 	return (0);
 }
