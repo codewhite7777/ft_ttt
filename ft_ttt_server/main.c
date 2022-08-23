@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:48:47 by alee              #+#    #+#             */
-/*   Updated: 2022/08/23 23:13:10 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/23 23:21:44 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int	main(void)
 	{
 		//accept
 		accept_client(&server);
+		
 		// if (server.current_client == 2)
 			// ft_tiktactok(...);
 	}
