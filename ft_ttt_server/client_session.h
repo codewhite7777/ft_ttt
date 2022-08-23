@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:50 by alee              #+#    #+#             */
-/*   Updated: 2022/08/23 22:23:27 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 00:31:29 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,18 @@
 
 typedef int SOCKET;
 
+typedef enum e_packet
+{
+    PACKET_MAX = 1024,
+}           t_packet;
+
 typedef struct s_client_session
 {
 	SOCKET				c_sock;
 	struct sockaddr_in	c_addr_in;
 	unsigned short		c_port;
+    unsigned char       s_buf[PACKET_MAX];
+    unsigned char       r_buf[PACKET_MAX];
 }	t_client_session;
 
 #endif
