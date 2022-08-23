@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/23 23:17:02 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/23 23:18:10 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,5 @@ void  accept_client(t_server *p_server)
         p_server->current_client += 1;
         p_server->c_sock[p_server->current_client] = client_sock;
     }
-    return (client_sock);
+    return ;
 }
