@@ -1,10 +1,12 @@
-#include <iostream>
+#include <stdio.h>
 #include <unistd.h>
-using namespace std;
+#include <string.h>
+
 
 int visited[3][3];
 char board[3][3];
 
+// default print
 void ft_print_board(char board[][3])
 {
     for (int i = 0; i < 3; ++i)
@@ -21,6 +23,9 @@ void ft_print_board(char board[][3])
     printf("\n");
 }
 
+// upgrade print
+
+// check board
 int check_already_board(int visited[][3], int y, int x)
 {
     if (visited[y - 1][x - 1])
@@ -43,8 +48,19 @@ enum state
 };
 
 const char * err1 = "already in board\n";
+const char * err2 = "not in range (1 ~ 3)\n";
+
 int dy[] = {0, 1, 1, 1};
 int dx[] = {1, 1, 0, -1};
+
+int check_range(int ny, int nx)
+{
+    // printf("%d %d\n", ny, nx);
+    if (ny < 0 || ny >= 3 || nx < 0 || nx >= 3)
+        return (1);
+    return (0);
+}
+
 int check_win(bool stone, int count)
 {
     char now;
@@ -66,12 +82,12 @@ int check_win(bool stone, int count)
                     int nx = j + dx[d];
                     
                     // cout << ny << ' ' << nx << '\n';
-                    if (ny < 0 || ny >= 3 || nx < 0 || nx >= 3 || board[ny][nx] != now)
-                        continue;
+                    if (check_range(ny, nx) || board[ny][nx] != now)
+                        continue ;
                     ny += dy[d];
                     nx += dx[d];
-                    if (ny < 0 || ny >= 3 || nx < 0 || nx >= 3 || board[ny][nx] != now)
-                        continue;
+                    if (check_range(ny, nx) || board[ny][nx] != now)
+                        continue ;
                     // cout << ny << ' ' << nx << '\n';
                     if (board[ny][nx] != now)
                         continue;
@@ -83,9 +99,7 @@ int check_win(bool stone, int count)
                             return P2_WIN;
                     }
                 }
-                // cout << '\n';
             }
-            
         }
     }
     if (count == 9)
@@ -125,7 +139,7 @@ int main()
     {
         
         Input(&y, &x);
-        if (y < 1 || y > 3 || x < 1 || x > 3)
+        if (check_range(y - 1, x - 1))
             printf("not in range(1 ~ 3)\n");
         else
         {
@@ -141,7 +155,7 @@ int main()
 
                 // win check logic
                 int ret = check_win(stone, count);
-                cout << "ret: " << ret << '\n';
+                printf("ret: %d\n", ret);
                 if (ret !=  NOT_END)
                 {
                     flag = ret;
