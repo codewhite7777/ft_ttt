@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <arpa/inet.h>
+#include <stdbool.h>
 
 typedef int SOCKET;
 
@@ -27,8 +28,18 @@ typedef struct s_server {
 	SOCKET				sock;
 }				t_server;
 
+enum e_turn {
+	TURN_O,
+	TURN_X,
+};
+
+typedef struct s_client {
+	bool	now_turn;
+}		t_client;
+
 int	main(void) {
 	t_server	s_info;
+	t_client	c_info;
 
 	char buf[100];
 
@@ -54,15 +65,17 @@ int	main(void) {
 	if (retval == -1) {
 		// error handling
 	} else {
-		// send()
-		// recv()
-		// send connected
 		printf("connected with server\n");
-		//retval = send(s_info.sock, "0 0 c", 5, 0);
-		//printf("send retval: [%d]\n", retval);
 		retval = recv(s_info.sock, buf, sizeof(buf), 0);
 		printf("recv retval: [%d]\n", retval);
 		printf("buf: [%s]\n", buf);
+		if (strcmp(buf, "0 0 O") == 0)
+			c_info.now_turn = TURN_O;
+		if (strcmp(buf, "0 0 X") == 0)
+			c_info.now_turn = TURN_X;
+
+		// print default map
+		
 	}
 
 	// close()

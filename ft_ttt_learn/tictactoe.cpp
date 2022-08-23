@@ -7,31 +7,64 @@ int visited[3][3];
 char board[3][3];
 
 // default print
-void ft_print_board(char board[][3])
-{
-    for (int i = 0; i < 3; ++i)
-    {
-        for (int j = 0; j < 3; ++j)
-        {
-            if (!board[i][j])
-                printf("@");
-            else
-                printf("%c", board[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
+// void ft_print_board(char board[][3])
+// {
+//     for (int i = 0; i < 3; ++i)
+//     {
+//         for (int j = 0; j < 3; ++j)
+//         {
+//             if (!board[i][j])
+//                 printf("@");
+//             else
+//                 printf("%c", board[i][j]);
+//         }
+//         printf("\n");
+//     }
+//     printf("\n");
+// }
 
-// upgrade print
 
-// check board
-int check_already_board(int visited[][3], int y, int x)
+const char * t1[10] = 
 {
-    if (visited[y - 1][x - 1])
-        return (1);
-    return (0);
-}
+    "     0000000000     ",
+    "  0000        0000  ",
+    " 0                0 ",
+    "0                  0",
+    "0                  0",
+    "0                  0",
+    "0                  0",
+    " 0                0 ",
+    "  0000        0000  ",
+    "     0000000000     ",
+};
+
+const char * t2[10] = 
+{
+    "00                00",
+    " 000            000 ",
+    "   00          00   ",
+    "    0000    0000    ",
+    "        0000        ",
+    "        0000        ",
+    "    0000    0000    ",
+    "   00          00   ",
+    " 000            000 ",
+    "00                00"
+};
+
+const char * t3[10] = 
+{
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+};
 
 enum type
 {
@@ -46,6 +79,42 @@ enum state
     DRAW = 2,
     NOT_END = 3
 };
+
+void ft_print_board(char board[][3])
+{
+    for (int i = 0; i < 3; ++i)
+    {
+        
+        printf(" -------------------- -------------------- --------------------\n");
+        for (int y = 0 ; y < 10 ; ++y)
+        {
+            printf("|");
+            for (int x = 0 ; x < 3 ; ++x)
+            {
+            if (board[i][x] == type1)
+                printf("%s|", t1[y]);
+            else if (board[i][x] == type2)
+                printf("%s|", t2[y]);
+            else
+                printf("%s|", t3[y]);
+            }
+            printf("\n");
+        }
+    }
+    printf(" -------------------- -------------------- --------------------\n");
+}
+
+// upgrade print
+
+// check board
+int check_already_board(int visited[][3], int y, int x)
+{
+    if (visited[y - 1][x - 1])
+        return (1);
+    return (0);
+}
+
+
 
 const char * errorMessage[2] = {
     "not in range (1 ~ 3)\n",
@@ -143,13 +212,13 @@ int main()
 
         // check valid Input
         if (check_range(y - 1, x - 1))
-            printf(errorMessage[0]);
+            printf("%s", errorMessage[0]);
         // Valid input case
         else
         {
             // Check if the stone already exists
             if (check_already_board(visited, y, x))
-                printf(errorMessage[1]);
+                printf("%s", errorMessage[1]);
             else
             {
                 count++;
