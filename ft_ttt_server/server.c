@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 05:22:34 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 05:30:05 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ void    sendPacket(SOCKET c_sock, int sock_idx, t_server *p_server)
 
     memcpy(buf, p_server->c_session[sock_idx].s_buf, strlen((const char *)p_server->c_session[sock_idx].s_buf));
 	int	send_ret = send(c_sock, (const void *)buf, strlen((const char *)buf), 0);
+    printf("%d byte send \n", send_ret);
 	if (send_ret == -1)
 	{
         disconnect(c_sock, sock_idx, p_server);
@@ -136,19 +137,20 @@ void	ft_tictactoe(t_server *p_server)
         {
             buildPacket(PROTO_START, 0, p_server);
             buildPacket(PROTO_START, 1, p_server);
-            broadcast(p_server);
-            buildPacket(PROTO_O, 0, p_server);
-            buildPacket(PROTO_X, 1, p_server);
-            broadcast(p_server);
+            // broadcast(p_server);
+
+            // broadcast(p_server);
             p_server->s_status = PLAY;
         }
         else if (p_server->s_status == PLAY)
         {
-            printf("PLAY \n");
+            buildPacket(PROTO_O, 0, p_server);
+            buildPacket(PROTO_X, 1, p_server);
+            // printf("PLAY \n");
         }
         else if (p_server->s_status == END)
         {
-            printf("END \n");
+            // printf("END \n");
         }
     }
     return ;
