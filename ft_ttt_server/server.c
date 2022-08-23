@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 05:15:54 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 05:19:25 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ void	insertPacket(unsigned char *buf, const char *packet_type)
 
 void	buildPacket(const char *packet_type, int sock_idx, t_server *p_server)
 {
-    if (packet_type == PROTO_START || packet_type == PROTO_END)
+    if (strcmp(packet_type, PROTO_START) == 0 || strcmp(packet_type, PROTO_END) == 0)
         insertPacket(p_server->c_session[sock_idx].s_buf, packet_type);
     return ;
 }
