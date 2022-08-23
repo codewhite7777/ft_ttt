@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:21 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 01:19:50 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 02:55:26 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,13 @@
 
 typedef int SOCKET;
 
+typedef enum e_status
+{
+	START = 0,
+	PLAY,
+	END,
+}			t_status;
+
 typedef struct s_server
 {
 	//server data
@@ -25,6 +32,7 @@ typedef struct s_server
 	unsigned short		s_port;
 	SOCKET				s_listen_sock;
 	struct sockaddr_in	s_addr_in;
+	t_status			s_status;
 
     //client data
 	t_client_session	c_session[CLIENT_MAX];
@@ -36,7 +44,12 @@ void	ft_network(t_server *p_server);
 SOCKET	getMaxFD(t_server *p_server);
 void	recvPacket(SOCKET c_sock, int sock_idx, t_server *p_server);
 void	sendPacket(SOCKET c_sock, int sock_idx, t_server *p_server);
-
 void	ft_tictactoe(t_server *p_server);
+void	ft_disconnect(t_server *p_server);
+void	disconnect(SOCKET c_sock, int sock_idx, t_server *p_server);
+
+void	insertPacket(SOCKET c_sock);
+void	buildPacket(void);
+void	broadcast(void);
 
 #endif
