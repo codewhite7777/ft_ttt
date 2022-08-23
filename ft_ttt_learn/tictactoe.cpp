@@ -47,21 +47,22 @@ enum state
     NOT_END = 3
 };
 
-const char * err1 = "already in board\n";
-const char * err2 = "not in range (1 ~ 3)\n";
+const char * errorMessage[2] = {
+    "not in range (1 ~ 3)\n",
+    "already in board\n"
+};
 
 int dy[] = {0, 1, 1, 1};
 int dx[] = {1, 1, 0, -1};
 
 int check_range(int ny, int nx)
 {
-    // printf("%d %d\n", ny, nx);
     if (ny < 0 || ny >= 3 || nx < 0 || nx >= 3)
         return (1);
     return (0);
 }
 
-int check_win(bool stone, int count)
+int check_game_state(bool stone, int count)
 {
     char now;
     stone == 0 ? now = type1 : now = type2;
@@ -137,15 +138,18 @@ int main()
 
     while (true)
     {
-        
+        // Input
         Input(&y, &x);
+
+        // check valid Input
         if (check_range(y - 1, x - 1))
-            printf("not in range(1 ~ 3)\n");
+            printf(errorMessage[0]);
+        // Valid input case
         else
         {
+            // Check if the stone already exists
             if (check_already_board(visited, y, x))
-                // write(2, err1, strlen(err1));
-                printf("%s", err1);
+                printf(errorMessage[1]);
             else
             {
                 count++;
@@ -153,16 +157,16 @@ int main()
                 visited[y - 1][x - 1] = 1;
                 ft_print_board(board);
 
-                // win check logic
-                int ret = check_win(stone, count);
-                printf("ret: %d\n", ret);
+                // Check game state
+                int ret = check_game_state(stone, count);
+                printf("Game State is: %d\n", ret);
                 if (ret !=  NOT_END)
                 {
                     flag = ret;
                     break;
                 }
-
-                // state change
+                
+                // turn change ex) O -> X -> O
                 stone = !stone;
             }
         }
