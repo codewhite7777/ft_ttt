@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 03:53:13 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 03:57:03 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,11 @@ void  accept_client(t_server *p_server)
 
     c_socklen = sizeof(c_addr_in);
     SOCKET  client_sock = accept(p_server->s_listen_sock, (struct sockaddr *)&c_addr_in, &c_socklen);
-    printf("%d \n", client_sock);
     if (p_server->current_client >= 2)
+    {
+        printf("[%d] client disconnected \n", client_sock);
         close(client_sock);
+    }
     else
     {
         p_server->c_session[p_server->current_client].c_sock = client_sock;
@@ -63,7 +65,7 @@ void	ft_network(t_server *p_server)
 	time_out.tv_sec = 0;
 	time_out.tv_usec = 0;
 
-    int select_result = select(getMaxFD(p_server) + 1, &read_set, NULL, NULL, NULL);
+    int select_result = select(getMaxFD(p_server) + 1, &read_set, NULL, NULL, &time_out);
     if (select_result > 0)
     {
         //listen socket event
