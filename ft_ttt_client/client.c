@@ -27,13 +27,24 @@ int	main(void) {
 	// connect()
 	struct sockaddr_in	c_addr_in;
 
-	// get server ip
-	char				*server_ip;
+	// get server ip and port
+	char	s_ip[128];
+	unsigned short	s_port;
+	printf("Input server IP (-1 : 127.0.0.1): ");
+	scanf("%s", s_ip);
+	if (strcmp(s_ip, "-1") == 0)
+		strlcpy(s_ip, "127.0.0.1", sizeof(s_ip));
+	printf("Input server port: ");
+	scanf("%d", &s_port);
 
+	printf("ip: %s, port: %d\n", s_ip, s_port); // test ip and port
+
+	/*
 	memset(&c_addr_in, 0x00, sizeof(c_addr_in));
 	c_addr_in.sin_family = AF_INET;
 	c_addr_in.sin_port = htons(s_port);
 	inet_pton(AF_INET, s_ip, (void *)&c_addr_in.sin_addr);
+	*/
 
 	// send()
 	// recv()
