@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/23 23:24:00 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/23 23:30:32 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ void  accept_client(t_server *p_server)
         close(client_sock);
     else
     {
+        int send_result = send(p_server->c_sock[p_server->current_client], "ft_ttt", 6, 0);
         p_server->current_client += 1;
         p_server->c_sock[p_server->current_client] = client_sock;
-        int send_result = send(p_server->c_sock[0], "ft_ttt", 6, 0);
         printf("%d client , %dbyte send \n", p_server->c_sock[p_server->current_client], send_result);
     }
     return ;
