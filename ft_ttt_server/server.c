@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 01:20:15 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 02:56:27 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,12 +95,7 @@ void	recvPacket(SOCKET c_sock, int sock_idx, t_server *p_server)
 	ssize_t	recv_ret = recv(c_sock, buf, sizeof(buf), 0);
 	//disconnect
 	if (recv_ret == 0)
-    {
-        //-> disconnect(...)
-        close(c_sock);
-        p_server->current_client -= 1;
-        //2) 남은 클라이언트에게 승리 메시지 전송
-    }
+        disconnect(c_sock, sock_idx, p_server);
 	else if (recv_ret > 0)
 	{
         memcpy(p_server->c_session[sock_idx].r_buf, buf, (size_t)recv_ret);
@@ -117,9 +112,7 @@ void    sendPacket(SOCKET c_sock, int sock_idx, t_server *p_server)
 	int	send_ret = send(c_sock, (const void *)buf, strlen((const char *)buf), 0);
 	if (send_ret == -1)
 	{
-        close(c_sock);
-        p_server->current_client -= 1;
-        //2) 남은 클라이언트에게 승리 메시지 전송
+        disconnect(c_sock, sock_idx, p_server);
         return ;
 	}
 	//iter->second->getSendBuf().erase(0, send_ret);
@@ -129,6 +122,58 @@ void    sendPacket(SOCKET c_sock, int sock_idx, t_server *p_server)
 }
 
 void	ft_tictactoe(t_server *p_server)
+{
+    if (p_server->current_client == 2)
+    {
+        if (p_server->s_status == START)
+        {
+            printf("START \n");
+        }
+        else if (p_server->s_status == PLAY)
+        {
+            printf("PLAY \n");
+            while (1);
+        }
+        else if (p_server->s_status == END)
+        {
+
+        }
+    }
+    return ;
+}
+
+void	ft_disconnect(t_server *p_server)
+{
+    for (int i = 0; i < p_server->current_client; i++)
+    {
+        if (p_server->c_session[i].disconnect_flag)
+        {
+            close(p_server->c_session[i].c_sock);
+            p_server->current_client -= 1;
+            memset((void *)&p_server->c_session[i], 0x00, sizeof(p_server->c_session[i]));
+        }
+    }
+    return ;
+}
+
+void	disconnect(SOCKET c_sock, int sock_idx, t_server *p_server)
+{
+    p_server->c_session[sock_idx].disconnect_flag = 1;
+    return ;
+}
+
+void	insertPacket(SOCKET c_sock)
+{
+    (void)c_sock;
+    return ;
+}
+
+void	buildPacket(void)
+{
+    return ;
+}
+
+void	broadcast(void)
 {
     return ;
 }

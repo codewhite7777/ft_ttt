@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:50 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 00:31:29 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 02:37:41 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_client_session
 	unsigned short		c_port;
     unsigned char       s_buf[PACKET_MAX];
     unsigned char       r_buf[PACKET_MAX];
+    unsigned char       disconnect_flag;
 }	t_client_session;
 
 #endif
