@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:48:47 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 02:45:24 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 03:36:39 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,19 @@ int	main(void)
 		exit(1);
 	}
 
-	//set nonblock socket opt
+	//set listen socket nonblock opt
 	fcntl(server.s_listen_sock, F_SETFL, O_NONBLOCK);
+	
+
+	//set listen socket SO_REUSEADDR
+	int optval = 1;
+	int	retval = setsockopt(server.s_listen_sock, SOL_SOCKET, SO_REUSEADDR,
+		&optval, sizeof(optval));
+	if (retval == -1)
+	{
+		printf("Err : setsockopt(...) \n");
+		exit(1);
+	}
 	
 	//bind(...)
 	memset(&server.s_addr_in, 0x00, sizeof(server.s_addr_in));

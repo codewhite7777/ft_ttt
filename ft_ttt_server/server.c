@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 02:56:27 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 03:33:45 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	ft_network(t_server *p_server)
 	time_out.tv_sec = 0;
 	time_out.tv_usec = 0;
 
-    int select_result = select(getMaxFD(p_server), &read_set, &write_set, NULL, &time_out);
+    int select_result = select(getMaxFD(p_server), &read_set, NULL, NULL, &time_out);
     if (select_result > 0)
     {
         //listen socket event
@@ -70,9 +70,9 @@ void	ft_network(t_server *p_server)
         {
             if (FD_ISSET(p_server->c_session[i].c_sock, &read_set))
                 recvPacket(p_server->c_session[i].c_sock, i, p_server);
-            if (FD_ISSET(p_server->c_session[i].c_sock, &write_set) &&
-            strlen((const char *)p_server->c_session[i].s_buf) > 0)
-                sendPacket(p_server->c_session[i].c_sock, i, p_server);
+            // if (FD_ISSET(p_server->c_session[i].c_sock, &write_set) &&
+            // strlen((const char *)p_server->c_session[i].s_buf) > 0)
+                // sendPacket(p_server->c_session[i].c_sock, i, p_server);
         }
     }
     return ;
@@ -80,7 +80,7 @@ void	ft_network(t_server *p_server)
 
 SOCKET	getMaxFD(t_server *p_server)
 {
-	int	max_fd = p_server->s_listen_sock;
+	SOCKET	max_fd = p_server->s_listen_sock;
 	for (int i = 0; i <p_server->current_client; i++)
 	{
 		if (max_fd < p_server->c_session[i].c_sock)
@@ -132,11 +132,10 @@ void	ft_tictactoe(t_server *p_server)
         else if (p_server->s_status == PLAY)
         {
             printf("PLAY \n");
-            while (1);
         }
         else if (p_server->s_status == END)
         {
-
+            printf("END \n");
         }
     }
     return ;
