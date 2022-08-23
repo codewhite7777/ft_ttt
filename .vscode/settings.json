@@ -1,5 +1,10 @@
 {
-	"files.associations": {
-		"in.h": "c"
-	}
+  "files.associations": {
+    "*.c": "c",
+    "stdio.h": "c",
+    "ostream": "c",
+    "__split_buffer": "cpp",
+    "string": "cpp",
+    "vector": "cpp"
+  },
 }
