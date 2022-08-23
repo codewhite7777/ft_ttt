@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:48:47 by alee              #+#    #+#             */
-/*   Updated: 2022/08/23 23:21:44 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/23 23:51:25 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "server.h"
 #include "client_session.h"
 #include <stdlib.h>
+#include <fcntl.h>
 
 int	main(void)
 {
@@ -38,6 +39,9 @@ int	main(void)
 		printf("Err : socket(...) \n");
 		exit(1);
 	}
+
+	//set nonblock socket opt
+	fcntl(server.s_listen_sock, F_SETFL, O_NONBLOCK);
 	
 	//bind(...)
 	memset(&server.s_addr_in, 0x00, sizeof(server.s_addr_in));
@@ -66,7 +70,6 @@ int	main(void)
 	{
 		//accept
 		accept_client(&server);
-		
 		// if (server.current_client == 2)
 			// ft_tiktactok(...);
 	}
