@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 03:33:45 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 03:50:40 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,21 @@
 
 void  accept_client(t_server *p_server)
 {
+    printf("accept client(...) \n");
     struct sockaddr_in  c_addr_in;
     socklen_t           c_socklen;
 
     c_socklen = sizeof(c_addr_in);
     SOCKET  client_sock = accept(p_server->s_listen_sock, (struct sockaddr *)&c_addr_in, &c_socklen);
+    printf("%d \n", client_sock);
     if (p_server->current_client > 2)
         close(client_sock);
     else
     {
         p_server->c_session[p_server->current_client].c_sock = client_sock;
         p_server->current_client += 1;
+        printf("new client connect \n");
+        printf("current client : %d \n", p_server->current_client);
     }
     return ;
 }
@@ -59,7 +63,7 @@ void	ft_network(t_server *p_server)
 	time_out.tv_sec = 0;
 	time_out.tv_usec = 0;
 
-    int select_result = select(getMaxFD(p_server), &read_set, NULL, NULL, &time_out);
+    int select_result = select(getMaxFD(p_server) + 1, &read_set, NULL, NULL, NULL);
     if (select_result > 0)
     {
         //listen socket event
@@ -81,7 +85,7 @@ void	ft_network(t_server *p_server)
 SOCKET	getMaxFD(t_server *p_server)
 {
 	SOCKET	max_fd = p_server->s_listen_sock;
-	for (int i = 0; i <p_server->current_client; i++)
+	for (int i = 0; i < p_server->current_client; i++)
 	{
 		if (max_fd < p_server->c_session[i].c_sock)
 			max_fd = p_server->c_session[i].c_sock;
@@ -128,14 +132,17 @@ void	ft_tictactoe(t_server *p_server)
         if (p_server->s_status == START)
         {
             printf("START \n");
+            p_server->s_status = PLAY;
         }
         else if (p_server->s_status == PLAY)
         {
             printf("PLAY \n");
+            p_server->s_status = END;
         }
         else if (p_server->s_status == END)
         {
             printf("END \n");
+            exit(1);
         }
     }
     return ;
@@ -145,7 +152,7 @@ void	ft_disconnect(t_server *p_server)
 {
     for (int i = 0; i < p_server->current_client; i++)
     {
-        if (p_server->c_session[i].disconnect_flag)
+        if (p_server->c_session[i].disconnect_flag == 1)
         {
             close(p_server->c_session[i].c_sock);
             p_server->current_client -= 1;
