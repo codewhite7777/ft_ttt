@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 04:38:02 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 05:15:54 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,23 +134,21 @@ void	ft_tictactoe(t_server *p_server)
     {
         if (p_server->s_status == START)
         {
-            // insertPacket(p_server->c_session[0].s_buf, PROTO_START);
             buildPacket(PROTO_START, 0, p_server);
             buildPacket(PROTO_START, 1, p_server);
-            // buildPacket(PROTO_O, 0, p_server);
-            // buildPacket(PROTO_X, 1, p_server);
+            broadcast(p_server);
+            buildPacket(PROTO_O, 0, p_server);
+            buildPacket(PROTO_X, 1, p_server);
             broadcast(p_server);
             p_server->s_status = PLAY;
         }
         else if (p_server->s_status == PLAY)
         {
             printf("PLAY \n");
-            p_server->s_status = END;
         }
         else if (p_server->s_status == END)
         {
             printf("END \n");
-            p_server->s_status = START;
         }
     }
     return ;
