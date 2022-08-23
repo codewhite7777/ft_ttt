@@ -30,6 +30,8 @@ typedef struct s_server {
 int	main(void) {
 	t_server	s_info;
 
+	char buf[100];
+
 	memset(&s_info, 0x00, sizeof(s_info));
 	// get server ip and port
 	printf("Input server IP (-1 : 127.0.0.1): ");
@@ -37,7 +39,7 @@ int	main(void) {
 	if (strcmp(s_info.ip, "-1") == 0)
 		strlcpy(s_info.ip, "127.0.0.1", sizeof(s_info.ip));
 	printf("Input server port: ");
-	scanf("%d", &(s_info.port));
+	scanf("%hd", &(s_info.port));
 	printf("ip: %s, port: %d\n", s_info.ip, s_info.port); // test ip and port
 	// socket()
 	s_info.sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -52,14 +54,19 @@ int	main(void) {
 	if (retval == -1) {
 		// error handling
 	} else {
+		// send()
+		// recv()
 		// send connected
-		send(s_info.sock, "0 0 c", 5, 0);
+		printf("connected with server\n");
+		//retval = send(s_info.sock, "0 0 c", 5, 0);
+		//printf("send retval: [%d]\n", retval);
+		retval = recv(s_info.sock, buf, sizeof(buf), 0);
+		printf("recv retval: [%d]\n", retval);
+		printf("buf: [%s]\n", buf);
 	}
 
-	// send()
-	// recv()
-
 	// close()
+	while (1);
 
 	return (0);
 }
