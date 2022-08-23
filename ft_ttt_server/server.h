@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:21 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 02:55:26 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 04:20:01 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	ft_tictactoe(t_server *p_server);
 void	ft_disconnect(t_server *p_server);
 void	disconnect(SOCKET c_sock, int sock_idx, t_server *p_server);
 
-void	insertPacket(SOCKET c_sock);
-void	buildPacket(void);
-void	broadcast(void);
+void	insertPacket(unsigned char *buf, const char *packet_type);
+void	buildPacket(const char *packet_type, int sock_idx, t_server *p_server);
+void	broadcast(t_server *p_server);
 
 #endif

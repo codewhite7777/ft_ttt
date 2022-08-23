@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 03:57:03 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 04:38:02 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
+#include "packet_protocol.h"
 
 void  accept_client(t_server *p_server)
 {
@@ -78,7 +79,7 @@ void	ft_network(t_server *p_server)
                 recvPacket(p_server->c_session[i].c_sock, i, p_server);
             // if (FD_ISSET(p_server->c_session[i].c_sock, &write_set) &&
             // strlen((const char *)p_server->c_session[i].s_buf) > 0)
-                // sendPacket(p_server->c_session[i].c_sock, i, p_server);
+                sendPacket(p_server->c_session[i].c_sock, i, p_server);
         }
     }
     return ;
@@ -133,7 +134,12 @@ void	ft_tictactoe(t_server *p_server)
     {
         if (p_server->s_status == START)
         {
-            printf("START \n");
+            // insertPacket(p_server->c_session[0].s_buf, PROTO_START);
+            buildPacket(PROTO_START, 0, p_server);
+            buildPacket(PROTO_START, 1, p_server);
+            // buildPacket(PROTO_O, 0, p_server);
+            // buildPacket(PROTO_X, 1, p_server);
+            broadcast(p_server);
             p_server->s_status = PLAY;
         }
         else if (p_server->s_status == PLAY)
@@ -144,7 +150,7 @@ void	ft_tictactoe(t_server *p_server)
         else if (p_server->s_status == END)
         {
             printf("END \n");
-            exit(1);
+            p_server->s_status = START;
         }
     }
     return ;
@@ -170,18 +176,22 @@ void	disconnect(SOCKET c_sock, int sock_idx, t_server *p_server)
     return ;
 }
 
-void	insertPacket(SOCKET c_sock)
+void	insertPacket(unsigned char *buf, const char *packet_type)
 {
-    (void)c_sock;
+    memcpy(buf, packet_type, strlen(packet_type));
     return ;
 }
 
-void	buildPacket(void)
+void	buildPacket(const char *packet_type, int sock_idx, t_server *p_server)
 {
+    if (packet_type == PROTO_START || packet_type == PROTO_END)
+        insertPacket(p_server->c_session[sock_idx].s_buf, packet_type);
     return ;
 }
 
-void	broadcast(void)
+void	broadcast(t_server *p_server)
 {
+    for (int i = 0; i < p_server->current_client; i++)
+        sendPacket(p_server->c_session[i].c_sock, i, p_server);
     return ;
 }
