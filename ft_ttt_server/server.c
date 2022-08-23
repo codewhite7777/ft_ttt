@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 05:30:05 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 05:41:31 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void    sendPacket(SOCKET c_sock, int sock_idx, t_server *p_server)
 
     memcpy(buf, p_server->c_session[sock_idx].s_buf, strlen((const char *)p_server->c_session[sock_idx].s_buf));
 	int	send_ret = send(c_sock, (const void *)buf, strlen((const char *)buf), 0);
-    printf("%d byte send \n", send_ret);
+    printf("sendPakcet(...), %d byte send \n", send_ret);
 	if (send_ret == -1)
 	{
         disconnect(c_sock, sock_idx, p_server);
@@ -186,6 +186,7 @@ void	buildPacket(const char *packet_type, int sock_idx, t_server *p_server)
 {
     if (strcmp(packet_type, PROTO_START) == 0 || strcmp(packet_type, PROTO_END) == 0)
         insertPacket(p_server->c_session[sock_idx].s_buf, packet_type);
+    printf("[%d] client sock, s_buf length : %d \n", p_server->c_session[sock_idx].c_sock, strlen(p_server->c_session[sock_idx].s_buf));
     return ;
 }
 

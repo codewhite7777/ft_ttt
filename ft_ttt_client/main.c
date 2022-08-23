@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+        */
+/*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/24 04:16:46 by mgo               #+#    #+#             */
-/*   Updated: 2022/08/24 04:16:47 by mgo              ###   ########.fr       */
+/*   Updated: 2022/08/24 07:47:41 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,12 @@ int	main(void) {
 
 	// config_network()
 	retval = config_network(&s_info);
-	if (retval == -1) {
+	if (retval == -1)
+	{
 		printf("connect() in config_network() failed\n");
-	} else {
+	}
+	else
+	{
 		printf("connected with server\n");
 
 		// wait for starting
@@ -46,7 +49,7 @@ int	main(void) {
 		if (retval == -1)
 			printf("recv() failed\n");
 		printf("recv retval: [%d]\n", retval);
-		printf("buf: [%s]\n", s_info.recv_buf);
+		printf("buf: [%s]\n", (char *)s_info.recv_buf);
 		if (strcmp((char *)s_info.recv_buf, "- - O") == 0) {
 			c_info.now_turn = TURN_O;
 			printf("turn: [O]\n");
@@ -73,7 +76,9 @@ int	main(void) {
 			if (retval == -1) {
 				printf("send() failed\n");
 			}
-		} else {
+		}
+		else
+		{
 			printf("waiting for opponent...\n");
 			// wait recv
 			retval = recv(s_info.sock, s_info.recv_buf, sizeof(s_info.recv_buf), 0);
@@ -82,8 +87,6 @@ int	main(void) {
 			}
 		}	
 	}
-	// close()
-	while (1);
 
 	return (0);
 }
