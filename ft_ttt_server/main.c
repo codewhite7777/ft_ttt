@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:48:47 by alee              #+#    #+#             */
-/*   Updated: 2022/08/23 21:35:39 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/23 23:13:10 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,15 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-
-typedef int	SOCKET;
-
-typedef struct s_server
-{
-	char				s_ip[128];
-	unsigned short		s_port;
-	SOCKET				s_listen_sock;
-	struct sockaddr_in	s_addr_in;
-}		t_server;
-
+#include "server.h"
+#include "client_session.h"
+#include <stdlib.h>
 
 int	main(void)
 {
 	t_server	server;
 
+	bzero(&server, sizeof(server));
 	//input ip, port
 	printf("input IP (-1 : 127.0.0.1) : ");
 	scanf("%s", server.s_ip);
@@ -43,7 +36,7 @@ int	main(void)
 	if (server.s_listen_sock == -1)
 	{
 		printf("Err : socket(...) \n");
-		return (1);
+		exit(1);
 	}
 	
 	//bind(...)
@@ -56,7 +49,7 @@ int	main(void)
 	if (bind_result == -1)
 	{
 		printf("Err : bind(...) \n");
-		return (1);
+		exit(1);
 	}
 
 	//listen(...)
@@ -64,15 +57,17 @@ int	main(void)
 	if (listen_result == -1)
 	{
 		printf("Err : listen(...) \n");
-		return (1);
+		exit(1);
 	}
 	
-	printf("ip : %s, port : %d \n", server.s_ip, server.s_port);
+	printf("server ip : %s, port : %d \n", server.s_ip, server.s_port);
 	printf("run \n");
 	while (1)
 	{
-
+		//accept
+		accept_client(&server);
+		// if (server.current_client == 2)
+			// ft_tiktactok(...);
 	}
-	
 	return (0);
 }
