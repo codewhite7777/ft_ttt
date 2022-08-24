@@ -85,11 +85,8 @@ void	process_input(t_server *s_info, t_game *g_info)
             continue ;
         }
         set_proto_in_send_buf(s_info, g_info);
-        printf("sendbuf: [%s]\n", s_info->send_buf);
         send_packet(s_info); // send user input to server
-        printf("under send()\n");
         recv_packet(s_info);
-        printf("under recv()\n");
         if (check_recved_proto(s_info, PROTO_REPOS) == false \
         && check_protocol((char *)(s_info->recv_buf)) == true)
             break ;
