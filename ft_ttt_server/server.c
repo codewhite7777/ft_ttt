@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 09:23:24 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 09:25:53 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	ft_network(t_server *p_server)
 	time_out.tv_sec = 0;
 	time_out.tv_usec = 0;
 
-    int select_result = select(getMaxFD(p_server) + 1, &read_set, NULL, NULL, &time_out);
+    int select_result = select(getMaxFD(p_server) + 1, &read_set, &write_set, NULL, &time_out);
     if (select_result > 0)
     {
         //listen socket event
@@ -137,9 +137,6 @@ void	ft_tictactoe(t_server *p_server)
         {
             buildPacket(PROTO_START, 0, p_server);
             buildPacket(PROTO_START, 1, p_server);
-            // broadcast(p_server);
-
-            // broadcast(p_server);
             p_server->s_status = PLAY;
         }
         else if (p_server->s_status == PLAY)
