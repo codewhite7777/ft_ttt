@@ -22,7 +22,6 @@ typedef struct s_test_ttt {
 	int		result;
 }				t_test;
 
-
 void	print_pass(char *line)
 {
 	printf("%sPASS:%s ", B_GREEN, EOC);
@@ -35,14 +34,6 @@ void	print_fail(char *line)
 	printf("%s\n", line);
 }
 
-int check_first_and_second(char *line)
-{
-	if (('1' <= line[0] && line[0] <= '3') || line[0] == '-')
-		return (true);
-	if (('1' <= line[2] && line[2] <= '3') || line[2] == '-')
-		return (true);
-	return (false);
-}
 
 int check_space(char *line)
 {
@@ -51,21 +42,30 @@ int check_space(char *line)
 	return (false);
 }
 
-int check_last(char *line)
+int check_specified(char checked)
 {
-	char	last;
+	if (checked == 'S' || checked == 'E' \
+		|| checked == 'R' || checked == 'O' || checked == 'X')
+		return (true);
+	return (false);
+}
 
-	last = line[4];
-	if (last == 'S' || last == 'E' || last == 'R' || last == 'O' || last == 'X')
+int check_params(char *line)
+{
+	if (('1' <= line[0] && line[0] <= '3') \
+		&& ('1' <= line[2] && line[2] <= '3') \
+		&& (line[4] == 'O' || line[4] == 'X'))
+		return (true);
+	else if (line[0] == '-' && line[2] == '-' && check_specified(line[4]))
 		return (true);
 	return (false);
 }
 
 int	check_protocol(char *line)
 {
-	if (!check_first_and_second(line) || !check_space(line) || !check_last(line))
-		return (false);
-	return (true);
+	if (check_params(line) && check_space(line))
+		return (true);
+	return (false);
 }
 
 int	main(int argc, char **argv)
@@ -91,6 +91,11 @@ int	main(int argc, char **argv)
 			print_fail(tst.line);
 		else
 			print_pass(tst.line);
+		free(tst.line);
+		tst.line = NULL;
+	}
+	if (tst.line)
+	{
 		free(tst.line);
 		tst.line = NULL;
 	}
