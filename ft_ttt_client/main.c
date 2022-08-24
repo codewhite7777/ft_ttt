@@ -11,51 +11,21 @@
 /* ************************************************************************** */
 
 #include "client.h"
+#include "packet_protocol.h"
 
-/*
-const char * errorMessage[2] = {
-    "not in range (1 ~ 3)\n",
-    "already in board\n"
-};
-*/
-
-int	run_ttt(t_server *s_info, t_client *c_info) {
+void	run_ttt(t_server *s_info, t_game *g_info) {
 	int	retval;
-
-	// wait for starting
-	retval = recv(s_info->sock, (void *)s_info->recv_buf, sizeof(s_info->recv_buf), 0);
-	printf("recv [%d]byte \n", retval);
-	if (retval == -1)
-		printf("recv() failed\n");
-	if (strcmp((char *)s_info->recv_buf, "- - S") == 0) {
-		printf("game start!\n");
-		ft_print_board(c_info->board);
-	}
-
-	retval = recv(s_info->sock, s_info->recv_buf, sizeof(s_info->recv_buf), 0);
-	if (retval == -1)
-		printf("recv() failed\n");
-	printf("recv retval: [%d]\n", retval);
-	printf("buf: [%s]\n", (char *)s_info->recv_buf);
-	if (strcmp((char *)s_info->recv_buf, "- - O") == 0) {
-		c_info->now_turn = TURN_O;
-		printf("turn: [O]\n");
-	}
-	if (strcmp((char *)s_info->recv_buf, "- - X") == 0) {
-		c_info->now_turn = TURN_X;
-		printf("turn: [X]\n");
-	}
-
-	if (c_info->now_turn == TURN_O) {
+	// logic
+	if (g_info->turn == TURN_O) {
 		// input coordinate
-		Input(&(c_info->y), &(c_info->x));
-		if (check_range(c_info->y - 1, c_info->x - 1)) {
+		Input(&(g_info->y), &(g_info->x));
+		if (check_range(g_info->y - 1, g_info->x - 1)) {
 			printf("%s", ERR_MSG_RANGE);
 		}
 		// set send msg
-		s_info->send_buf[0] = '0' + c_info->x;
+		s_info->send_buf[0] = '0' + g_info->x;
 		s_info->send_buf[1] = ' ';
-		s_info->send_buf[2] = '0' + c_info->y;
+		s_info->send_buf[2] = '0' + g_info->y;
 		s_info->send_buf[3] = ' ';
 		s_info->send_buf[4] = 'O';
 		s_info->send_buf[5] = 0;
@@ -75,24 +45,42 @@ int	run_ttt(t_server *s_info, t_client *c_info) {
 	}
 }
 
-int	main(void) {
-	t_server	s_info;
-	t_client	c_info;
-	int			retval;
-
-	memset(&s_info, 0x00, sizeof(s_info));
-	memset(&c_info, 0x00, sizeof(c_info));
-
-	// config_network()
-	retval = config_network(&s_info);
-	if (retval == -1)
+void	init_game(t_server *s_info, t_game *g_info) {
+	// start protocol
+	recv_packet(s_info);
+	printf("recv_buf: [%s]\n", s_info->recv_buf);
+	if (check_recved_proto(s_info, PROTO_START) == true)
 	{
-		printf("connect() in config_network() failed\n");
+		printf("game start!\n");
+		ft_print_board(g_info->board);
 	}
 	else
 	{
-		printf("connected with server\n");
-		run_ttt(&s_info, &c_info);
+		printf("no start protocol in buffer...\n");
 	}
+	// turn protocol
+	clean_buf(s_info->recv_buf);
+	recv_packet(s_info);
+	if (check_recved_proto(s_info, PROTO_O) == true)
+	{
+		g_info->turn = TURN_O;
+		printf("turn: [O]\n");
+	}
+	else if (check_recved_proto(s_info, PROTO_X) == true)
+	{
+		g_info->turn = TURN_X;
+		printf("turn: [X]\n");
+	}
+}
+
+int	main(void)
+{
+	t_server	s_info;
+	t_game		g_info;
+
+	config_network(&s_info);
+	init_game(&s_info, &g_info);
+	run_ttt(&s_info, &g_info);
+	// close
 	return (0);
 }

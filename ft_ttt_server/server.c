@@ -181,7 +181,7 @@ void	insertPacket(unsigned char *buf, const char *packet_type)
     bzero(buf, PACKET_MAX);
     memcpy(buf, packet_type, strlen(packet_type));
     buf[strlen(packet_type)] = '\0';
-    printf("insert Packet length : [%d] \n", strlen(packet_type));
+    printf("insert Packet length : [%lu] \n", strlen(packet_type));
     for (int i = 0; i < strlen((char *)buf); i++)
         printf("[%c]", buf[i]);
     return ;
