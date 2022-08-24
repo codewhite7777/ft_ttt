@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 05:41:31 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 09:23:24 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ void	ft_tictactoe(t_server *p_server)
         {
             buildPacket(PROTO_O, 0, p_server);
             buildPacket(PROTO_X, 1, p_server);
+            p_server->s_status = END;
             // printf("PLAY \n");
         }
         else if (p_server->s_status == END)
@@ -186,7 +187,7 @@ void	buildPacket(const char *packet_type, int sock_idx, t_server *p_server)
 {
     if (strcmp(packet_type, PROTO_START) == 0 || strcmp(packet_type, PROTO_END) == 0)
         insertPacket(p_server->c_session[sock_idx].s_buf, packet_type);
-    printf("[%d] client sock, s_buf length : %d \n", p_server->c_session[sock_idx].c_sock, strlen(p_server->c_session[sock_idx].s_buf));
+    printf("[%d] client sock, s_buf length : %lu \n", p_server->c_session[sock_idx].c_sock, strlen((const char *)p_server->c_session[sock_idx].s_buf));
     return ;
 }
 
