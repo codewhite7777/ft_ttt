@@ -21,7 +21,7 @@ SRC_LIST_SERV	=	main.c \
 					server.c
 SRC_SERV		=	$(addprefix $(DIR_SERV), $(SRC_LIST_SERV))
 OBJ_SERV		=	$(SRC_SERV:.c=.o)
-NAME_SERV		=	$(addprefix $(DIR_SERV), ft_ttt_server)
+NAME_SERV		=	$(addprefix $(DIR_SERV), sv)
 
 DIR_CLNT		=	./ft_ttt_client/
 SRC_LIST_CLNT	=	main.c \
@@ -29,7 +29,7 @@ SRC_LIST_CLNT	=	main.c \
 					tictactoe.c
 SRC_CLNT		=	$(addprefix $(DIR_CLNT), $(SRC_LIST_CLNT))
 OBJ_CLNT		=	$(SRC_CLNT:.c=.o)
-NAME_CLNT		=	$(addprefix $(DIR_CLNT), ft_ttt_client)
+NAME_CLNT		=	$(addprefix $(DIR_CLNT), cl)
 
 %.o	:	%.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -37,16 +37,14 @@ NAME_CLNT		=	$(addprefix $(DIR_CLNT), ft_ttt_client)
 $(NAME_SERV)	:	$(OBJ_SERV)
 	$(CC) $(CFLAGS) $(OBJ_SERV) -o $(NAME_SERV)
 
-$(NAME_CLNT)	:	$(OBJ_SERV)
-	$(CC) $(CFLAGS) $(OBJ_SERV) -o $(NAME_CLNT)
+$(NAME_CLNT)	:	$(OBJ_CLNT)
+	$(CC) $(CFLAGS) $(OBJ_CLNT) -o $(NAME_CLNT)
 
-.PHONY	:	s
-s		:	$(NAME_SERV)
+all		:	$(NAME_CLNT) $(NAME_SERV)
 
-.PHONY	:	c
 c		:	$(NAME_CLNT)
 
-all		:	s c
+s		:	$(NAME_SERV)
 
 clean	:
 	$(RM) $(OBJ_SERV)
@@ -58,4 +56,4 @@ fclean	: clean
 
 re	:	fclean all
 
-.PHONY	:	all clean fclean re
+.PHONY	:	all clean fclean re c s
