@@ -5,6 +5,7 @@
     "ostream": "c",
     "__split_buffer": "cpp",
     "string": "cpp",
-    "vector": "cpp"
+    "vector": "cpp",
+    "client.h": "c"
   },
 }

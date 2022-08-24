@@ -49,7 +49,7 @@ enum e_turn {
 typedef struct s_game {
 	enum e_turn	turn;
 	char		board[3][3];
-	int			visited[3][3];
+	//int			visited[3][3];
 	int			x;
 	int			y;
 }		t_game;

@@ -13,9 +13,251 @@
 #include "client.h"
 #include "packet_protocol.h"
 
-void	draw_map()
+const char * t1[] = 
 {
-	
+    "\x1b[34m       000000       ",
+    "\x1b[34m    000      000    ",
+    "\x1b[34m  00            00  ",
+    "\x1b[34m 00              00 ",
+    "\x1b[34m00                00",
+    "\x1b[34m0                  0",
+    "\x1b[34m0                  0",
+    "\x1b[34m00                00",
+    "\x1b[34m 00              00 ",
+    "\x1b[34m  00            00  ",
+    "\x1b[34m    000      000    ",
+    "\x1b[34m       000000       ",
+};
+
+const char * t2[] = 
+{
+    "\x1b[31m                    ",
+    "\x1b[31m  0              0  ",
+    "\x1b[31m    0          0    ",
+    "\x1b[31m      0      0      ",
+    "\x1b[31m        0  0        ",
+    "\x1b[31m         00         ",
+    "\x1b[31m         00         ",
+    "\x1b[31m        0  0        ",
+    "\x1b[31m      0      0      ",
+    "\x1b[31m    0          0    ",
+    "\x1b[31m  0              0  ",
+    "\x1b[31m                    ",
+};
+
+const char * t3[] = 
+{
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+};
+
+const char * state[9][12] = 
+{
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "      0       0     ",
+        "     00      00     ",
+        "      0       0     ",
+        "      0       0     ",
+        "      0       0     ",
+        "      0       0     ",
+        "     000 ,   000    ",
+        "                    ",
+        "                    ",
+    },
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "      0      00     ",
+        "     00     0  0    ",
+        "      0        0    ",
+        "      0       0     ",
+        "      0      0      ",
+        "      0     0       ",
+        "     000 ,  0000    ",
+        "                    ",
+        "                    "
+    },
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "      0      00     ",
+        "     00     0  0    ",
+        "      0        0    ",
+        "      0      00     ",
+        "      0        0    ",
+        "      0     0  0    ",
+        "     000  ,  00     ",
+        "                    ",
+        "                    "
+    },
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "     00       0     ",
+        "    0  0     00     ",
+        "       0      0     ",
+        "      0       0     ",
+        "     0        0     ",
+        "    0         0     ",
+        "    0000 ,   000    ",
+        "                    ",
+        "                    "
+    },
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "     00      00     ",
+        "    0  0    0  0    ",
+        "       0       0    ",
+        "      0       0     ",
+        "     0       0      ",
+        "    0       0       ",
+        "    0000 ,  0000    ",
+        "                    ",
+        "                    "
+    },
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "     00      00     ",
+        "    0  0    0  0    ",
+        "       0       0    ",
+        "      0      00     ",
+        "     0         0    ",
+        "    0       0  0    ",
+        "    0000 ,   00     ",
+        "                    ",
+        "                    "
+    },
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "     00       0     ",
+        "    0  0     00     ",
+        "       0      0     ",
+        "     00       0     ",
+        "       0      0     ",
+        "    0  0      0     ",
+        "     00  ,   000    ",
+        "                    ",
+        "                    "
+    },
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "     00      00     ",
+        "    0  0    0  0    ",
+        "       0       0    ",
+        "     00       0     ",
+        "       0     0      ",
+        "    0  0    0       ",
+        "     00  ,  0000    ",
+        "                    ",
+        "                    "
+    },
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "     00      00     ",
+        "    0  0    0  0    ",
+        "       0       0    ",
+        "     00      00     ",
+        "       0       0    ",
+        "    0  0    0  0    ",
+        "     00  ,   00     ",
+        "                    ",
+        "                    "
+    }
+};
+
+/*
+enum type
+{
+    type1 = (int)'O',
+    type2 = (int)'X'
+};
+
+enum state
+{
+    P1_WIN = 0,
+    P2_WIN = 1,
+    DRAW = 2,
+    NOT_END = 3
+};
+
+void ft_print_first()
+{
+    for (int i = 0; i < 3; ++i)
+    {
+        
+        printf("\x1b[0m -------------------- -------------------- --------------------\n");
+        for (int y = 0 ; y < 12; ++y)
+        {
+            printf("\x1b[0m|");
+            for (int x = 0 ; x < 3 ; ++x)
+            {
+                printf("%s", state[3 *i + x][y]);
+                printf("\x1b[0m|");
+            }
+            printf("\n");
+        }
+    }
+    printf("\x1b[0m -------------------- -------------------- --------------------\n");
+}
+*/
+
+void print_board(char board[][3])
+{
+    for (int i = 0; i < 3; ++i)
+    {
+        
+        printf("\x1b[0m -------------------- -------------------- --------------------\n");
+        for (int y = 0 ; y < 12; ++y)
+        {
+            printf("\x1b[0m|");
+            for (int x = 0 ; x < 3 ; ++x)
+            {
+            if (board[i][x] == 'O')
+                printf("%s", t1[y]);
+            else if (board[i][x] == 'X')
+                printf("%s", t2[y]);
+            else
+                printf("%s", state[3 * i + x][y]);
+            printf("\x1b[0m|");
+            }
+            printf("\n");
+        }
+    }
+    printf("\x1b[0m -------------------- -------------------- --------------------\n");
+}
+
+void	draw_map(t_server *s_info, t_game *g_info)
+{
+	// recv_buf to coord
+	get_coord_from_recv_buf(s_info, g_info);
+	set_coord_in_board(g_info);
+	print_board(g_info->board);
 }
 
 void	process_input(t_server *s_info, t_game *g_info)
@@ -29,7 +271,10 @@ void	process_input(t_server *s_info, t_game *g_info)
 	set_proto_in_send_buf(s_info, g_info);
 	send_packet(s_info);
 	recv_packet(s_info);
+
+	// check recv_packet
 	//draw_map()
+	draw_map(s_info, g_info);
 }
 
 void	process_input(t_server *s_info, t_game *g_info)
@@ -38,30 +283,27 @@ void	process_input(t_server *s_info, t_game *g_info)
 	printf("Waiting for opponent...\n");
 	recv_packet(s_info);
 	//draw_map();
+	draw_map(s_info, g_info);
 }
 
 void	run_ttt(t_server *s_info, t_game *g_info) {
-	int	retval;
-
-	// logic
-	if (g_info->turn == TURN_O)
+	while (1)
 	{
-		// process_input
-		process_input(s_info, g_info);
-		
-		// wait opponent and draw map
-	}
-	else if (g_info->turn == TURN_X)
-	{
-		// process_wait
-		process_wait(s_info, g_info);
-		
-
-	}
-	else
-	{
-		printf("unknown turn type...\n");
-		exit(1);
+		if (g_info->turn == TURN_O)
+		{
+			process_input(s_info, g_info);
+			process_wait(s_info, g_info);
+		}
+		else if (g_info->turn == TURN_X)
+		{
+			process_wait(s_info, g_info);
+			process_input(s_info, g_info);
+		}
+		else
+		{
+			printf("unknown turn type...\n");
+			exit(1);
+		}
 	}
 }
 
