@@ -48,6 +48,9 @@ c		:	$(NAME_CLNT)
 
 s		:	$(NAME_SERV)
 
+test	:
+	$(CC) $(CFLAGS) ./tester/tester.c ./tester/get_next_line.c ./tester/get_next_line_utils.c -o tester_ttt
+
 clean	:
 	$(RM) $(OBJ_SERV)
 	$(RM) $(OBJ_CLNT)
