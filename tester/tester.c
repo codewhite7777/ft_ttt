@@ -25,19 +25,16 @@ typedef struct s_test_ttt {
 
 void	print_pass(char *line)
 {
-	// SUCCESS: 
 	printf("%sPASS:%s ", B_GREEN, EOC);
 	printf("%s\n", line);
 }
 
 void	print_fail(char *line)
 {
-	// FAIL: 
 	printf("%sFAIL:%s ", B_RED, EOC);
 	printf("%s\n", line);
 }
 
-// first and second are num or '-'
 int check_first_and_second(char *line)
 {
 	if (('1' <= line[0] && line[0] <= '3') || line[0] == '-')
@@ -54,7 +51,6 @@ int check_space(char *line)
 	return (false);
 }
 
-// last is specified
 int check_last(char *line)
 {
 	char	last;
@@ -67,10 +63,6 @@ int check_last(char *line)
 
 int	check_protocol(char *line)
 {
-	/*
-	if (line[5] != '\n')
-		return (false);
-	*/
 	if (!check_first_and_second(line) || !check_space(line) || !check_last(line))
 		return (false);
 	return (true);
@@ -85,7 +77,7 @@ int	main(int argc, char **argv)
 	memset(&tst, 0x00, sizeof(tst));
 	tst.file = argv[1];
 	tst.fd = open(tst.file, O_RDONLY);
-	while (get_next_line(tst.fd, &(tst.line)) > 0) // -1 and 0
+	while (get_next_line(tst.fd, &(tst.line)) > 0)
 	{
 		if (strlen(tst.line) == 0)
 		{
