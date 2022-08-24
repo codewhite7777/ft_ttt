@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 21:00:34 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 21:06:12 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,6 +302,8 @@ void	ft_tictactoe(t_server *p_server)
         else if (p_server->s_status == END)
         {
             // printf("END \n");
+            disconnect(0, 0, p_server);
+            disconnect(0, 1, p_server);
         }
     }
     return ;
@@ -323,6 +325,7 @@ void	ft_disconnect(t_server *p_server)
 
 void	disconnect(SOCKET c_sock, int sock_idx, t_server *p_server)
 {
+    (void)c_sock;
     p_server->c_session[sock_idx].disconnect_flag = 1;
     return ;
 }
