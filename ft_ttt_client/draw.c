@@ -208,8 +208,6 @@ const char * last[3][7] = {
 	}
 };
 
-
-
 void print_board(char board[][3])
 {
     system("clear");

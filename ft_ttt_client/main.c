@@ -80,12 +80,10 @@ void	process_input(t_server *s_info, t_game *g_info)
         input_coord(&(g_info->y), &(g_info->x));
         if (check_range(g_info->y - 1, g_info->x - 1))
         {
-            printf("y: [%d], x: [%d]\n", g_info->y, g_info->x);
             printf("%s", ERR_MSG_RANGE);
             continue ;
         }
         set_proto_in_send_buf(s_info, g_info);
-        printf("sendbuf: [%s]\n", s_info->send_buf);
         send_packet(s_info); // send user input to server
         // printf("under send()\n");
         recv_packet(s_info);
@@ -149,7 +147,6 @@ void	run_ttt(t_server *s_info, t_game *g_info) {
 void	init_game(t_server *s_info, t_game *g_info) {
 	// start protocol
 	recv_packet(s_info);
-	printf("recv_buf: [%s]\n", s_info->recv_buf);
 	if (check_recved_proto(s_info, PROTO_START) == true)
 	{
 		printf("game start!\n");
