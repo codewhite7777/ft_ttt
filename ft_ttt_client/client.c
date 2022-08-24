@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "client.h"
-
+#include "packet_protocol.h"
 void	clean_infos(t_server *s_info, t_game *g_info)
 {
 	memset(&s_info, 0x00, sizeof(s_info));
@@ -57,9 +57,8 @@ void	recv_packet(t_server *s_info) {
 
 	if (strlen((char *)(s_info->recv_buf)) != 0)
 		clean_buf(s_info->recv_buf);
-	printf("recv_buf before recv(): [%s]\n", s_info->recv_buf); // test
 	recv_ret = recv(s_info->sock, (void *)buf, sizeof(buf), 0);
-	printf("recv_ret: [%zd]\n", recv_ret); // test
+	printf("recvPACKET FUNCTION-    recv_ret: [%zd]\n", recv_ret); // test
 	if (recv_ret == -1)
 	{
 		printf("recv() failed\n");
@@ -74,12 +73,23 @@ void	recv_packet(t_server *s_info) {
 	{
 		memcpy(s_info->recv_buf, buf, (size_t)recv_ret);
         s_info->recv_buf[recv_ret] = '\0';
+		printf("value: [%s]\n", s_info->recv_buf);
+		if (!strcmp(s_info->recv_buf, PROTO_WIN_P1))
+		{
+			printf("WIN 1\n");
+			exit(1);
+		}
+		if (!strcmp(s_info->recv_buf, PROTO_WIN_P2))
+		{
+			printf("WIN 2\n");
+			exit(1);
+		}
 	}
 	return ;
 }
 
 bool	check_recved_proto(t_server *s_info, char *proto) {
-	printf("recv_buf: [%s]\n", s_info->recv_buf); // test
+	printf("check_recv FUNCTION recv_buf: [%s]\n", s_info->recv_buf); // test
 	if (strncmp((char *)s_info->recv_buf, proto, strlen(proto)) == 0)
 	{
 		if (strlen((char *)(s_info->recv_buf)) > strlen(proto))

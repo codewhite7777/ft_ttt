@@ -87,9 +87,9 @@ void	process_input(t_server *s_info, t_game *g_info)
         set_proto_in_send_buf(s_info, g_info);
         printf("sendbuf: [%s]\n", s_info->send_buf);
         send_packet(s_info); // send user input to server
-        printf("under send()\n");
+        // printf("under send()\n");
         recv_packet(s_info);
-        printf("under recv()\n");
+        // printf("under recv()\n");
         if (check_recved_proto(s_info, PROTO_REPOS) == false \
         && check_protocol((char *)(s_info->recv_buf)) == true)
             break ;
@@ -101,8 +101,8 @@ void	process_input(t_server *s_info, t_game *g_info)
 void	process_wait(t_server *s_info, t_game *g_info)
 {
 	// wait opponent and draw map
-	printf("Waiting for opponent...\n");
-	recv_packet(s_info);
+	// printf("Waiting for opponent...\n");
+	// recv_packet(s_info);
     set_board(s_info, g_info);
     print_board(g_info->board);
 }
@@ -126,12 +126,16 @@ void	run_ttt(t_server *s_info, t_game *g_info) {
 		if (g_info->stone == STONE_O)
 		{
 			process_input(s_info, g_info);
+			printf("Waiting for opponent...\n");
+			recv_packet(s_info);
             if (check_recv_end(s_info, g_info))
                 break ;
 			process_wait(s_info, g_info);
 		}
 		else if (g_info->stone == STONE_X)
 		{
+			printf("Waiting for opponent...\n");
+			recv_packet(s_info);
 			process_wait(s_info, g_info);
             if (check_recv_end(s_info, g_info))
                 break ;
@@ -179,6 +183,7 @@ int	main(void)
     clean_infos(&s_info, &g_info);
 	config_network(&s_info);
 	init_game(&s_info, &g_info);
+	printf("RUN----------\n");
 	run_ttt(&s_info, &g_info);
     close(s_info.sock);
     print_ending(g_info.state);

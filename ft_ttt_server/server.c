@@ -287,8 +287,9 @@ void	ft_tictactoe(t_server *p_server)
                             if (ret == P1_WIN)
                             {
                                 // buildPacket(buf, 0, p_server);
-                                buildPacket(PROTO_WIN_P1, i, p_server);
-                                buildPacket(buf, 1, p_server);
+                                buildPacket(PROTO_WIN_P1, 0, p_server);
+                                buildPacket(PROTO_WIN_P1, 1, p_server);
+                                
                                 memset(buf, 0, sizeof(buf));
                                 // buildPacket(PROTO_WIN_P1, i, p_server);
                             }
@@ -298,8 +299,8 @@ void	ft_tictactoe(t_server *p_server)
                                 // buildPacket(buf, i, p_server);
                                 //buildPacket(buf, 0, p_server);
                                 //buildPacket(buf, 1, p_server);
-                                buildPacket(buf, 0, p_server);
-                                buildPacket(PROTO_WIN_P2, i, p_server);
+                                buildPacket(PROTO_WIN_P2, 0, p_server);
+                                buildPacket(PROTO_WIN_P2, 1, p_server);
                             }
                             else if (ret == DRAW)
                             {
