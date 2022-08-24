@@ -38,6 +38,8 @@ typedef struct s_server
     //client data
 	t_client_session	c_session[CLIENT_MAX];
     int                 current_client;
+
+	int					sign_close;
 }		t_server;
 
 void	accept_client(t_server *p_server);

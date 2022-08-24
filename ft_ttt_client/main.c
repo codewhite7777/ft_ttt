@@ -181,7 +181,6 @@ int	main(void)
     clean_infos(&s_info, &g_info);
 	config_network(&s_info);
 	init_game(&s_info, &g_info);
-	printf("RUN----------\n");
 	run_ttt(&s_info, &g_info);
     close(s_info.sock);
     print_ending(&g_info, g_info.state);

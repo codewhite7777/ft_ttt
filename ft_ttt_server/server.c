@@ -204,7 +204,10 @@ void	recvPacket(SOCKET c_sock, int sock_idx, t_server *p_server)
 	ssize_t	recv_ret = recv(c_sock, buf, sizeof(buf), 0);
 	//disconnect
 	if (recv_ret == 0)//클라이언트가 접속 종료된 경우, 서버에 존재하는 데이터 및 소켓 자원 정리
+    {
         disconnect(c_sock, sock_idx, p_server);
+        p_server->sign_close = 1;
+    }
 	else if (recv_ret > 0)
 	{
         memcpy(p_server->c_session[sock_idx].r_buf, buf, (size_t)recv_ret);//클라이언트의 recv buffer에 네트워크로 수신된 데이터 복사
@@ -233,7 +236,12 @@ void    sendPacket(SOCKET c_sock, int sock_idx, t_server *p_server)
 
 void	ft_tictactoe(t_server *p_server)
 {
-    if (p_server->current_client == 2)//현재 접속된 클라이언트의 수
+    if (p_server->sign_close == 1)
+    {
+        for (int i = 0; i < p_server->current_client; ++i)
+            disconnect(p_server->c_session[i].c_sock, i, p_server);
+    }
+    else if (p_server->current_client == 2)//현재 접속된 클라이언트의 수
     {
         if (p_server->s_status == START)//게임 서버의 처리 상태
         {
@@ -349,6 +357,11 @@ void	ft_disconnect(t_server *p_server)
             p_server->current_client -= 1;
             memset((void *)&p_server->c_session[i], 0x00, sizeof(p_server->c_session[i]));
         }
+    }
+    if (p_server->current_client == 0)
+    {
+        p_server->s_status = START;
+        p_server->sign_close = 0;
     }
     return ;
 }

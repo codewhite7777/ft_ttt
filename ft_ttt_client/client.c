@@ -84,6 +84,12 @@ void	recv_packet(t_server *s_info) {
 			print_ending(s_info->ptr_game, DRAW);
 			exit(0);
 		}
+		else if (!strcmp((char *)(s_info->recv_buf), PROTO_END))
+		{
+			printf("Game room closed.\n");
+			exit(1);
+		}
+		
 	}
 	return ;
 }
