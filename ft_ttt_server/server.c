@@ -37,7 +37,6 @@ enum state
 int visited[3][3];
 char board[3][3];
 int stone = 0;
-
 int check_range(int ny, int nx)
 {
     if (ny < 0 || ny >= 3 || nx < 0 || nx >= 3)
@@ -60,6 +59,7 @@ int check_game_state(int stone)
     char now;
     stone == 0 ? (now = type1) : (now = type2);
 
+
     printf("now :%c\n", now);
     for (int i = 0 ; i < 3 ; ++i)
     {
@@ -69,19 +69,22 @@ int check_game_state(int stone)
             if ((i == 0 || j == 0) && board[i][j] == now)
             {
                 // cout << "in \n";
-                int cnt = 1;
                 for (int d = 0 ; d < 4 ; ++d)
                 {
                     int ny = i + dy[d];
                     int nx = j + dx[d];
-                    
+
                     // cout << ny << ' ' << nx << '\n';
+                    
                     if (check_range(ny, nx) || board[ny][nx] != now)
                         continue ;
+                        printf("%d %d %c now:%c\n", ny, nx, board[ny][nx], now);
                     ny += dy[d];
                     nx += dx[d];
+                    
                     if (check_range(ny, nx) || board[ny][nx] != now)
                         continue ;
+                    printf("%d %d %c now:%c\n", ny, nx, board[ny][nx], now);
                     // cout << ny << ' ' << nx << '\n';
                     if (board[ny][nx] != now)
                         continue;
@@ -96,11 +99,22 @@ int check_game_state(int stone)
             }
         }
     }
+    for (int i = 0 ; i < 3 ; ++i)
+    {
+        for (int j = 0 ; j < 3 ; ++j)
+        {
+            printf("%c", board[i][j]);
+        }
+        printf("\n");
+    }
+
+
     int count = 0;
     for (int i = 0 ; i < 3 ; ++i)
         for (int j = 0 ; j < 3 ; ++j)
             if (visited[i][j])
                 count++;
+    printf("count: %d\n", count);
     if (count == 9)
         return DRAW;
     return NOT_END;
@@ -255,6 +269,7 @@ void	ft_tictactoe(t_server *p_server)
                     else
                     {
                         stone == 0 ? (board[y - 1][x - 1] = type1) : (board[y - 1][x - 1] = type2);
+                        // board[y - 1][x - 1] = stone;
                         visited[y - 1][x - 1] = 1;
                         char buf[12];
                         buf[0] = y + '0';
@@ -266,18 +281,16 @@ void	ft_tictactoe(t_server *p_server)
                         
                         // Check game state
                         int ret = check_game_state(stone);
+                        printf("ret:%d", ret);
                         if (ret !=  NOT_END)
                         {
                             if (ret == P1_WIN)
                             {
-                                // strcat(buf, PROTO_WIN_P1);
-                                // buildPacket(buf, i, p_server);
-                                // send(p_server->c_session[sock_idx].s_buf, );
                                 // buildPacket(buf, 0, p_server);
-                                // buildPacket(buf, 1, p_server);
-                                // buildPacket(buf, 0, p_server);
-                                // buildPacket(buf, 1, p_server);
                                 buildPacket(PROTO_WIN_P1, i, p_server);
+                                buildPacket(buf, 1, p_server);
+                                memset(buf, 0, sizeof(buf));
+                                // buildPacket(PROTO_WIN_P1, i, p_server);
                             }
                             else if (ret == P2_WIN)
                             {
@@ -285,6 +298,7 @@ void	ft_tictactoe(t_server *p_server)
                                 // buildPacket(buf, i, p_server);
                                 //buildPacket(buf, 0, p_server);
                                 //buildPacket(buf, 1, p_server);
+                                buildPacket(buf, 0, p_server);
                                 buildPacket(PROTO_WIN_P2, i, p_server);
                             }
                             else if (ret == DRAW)
@@ -306,7 +320,7 @@ void	ft_tictactoe(t_server *p_server)
                             buildPacket(buf, 0, p_server);
                             buildPacket(buf, 1, p_server);
                             memset(buf, 0, sizeof(buf));
-                            // stone = !stone;
+                            stone = !stone;
                         }
                         // turn change ex) O -> X -> O
                         
