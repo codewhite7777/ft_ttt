@@ -277,7 +277,7 @@ void	process_input(t_server *s_info, t_game *g_info)
 	draw_map(s_info, g_info);
 }
 
-void	process_input(t_server *s_info, t_game *g_info)
+void	process_wait(t_server *s_info, t_game *g_info)
 {
 	// wait opponent and draw map
 	printf("Waiting for opponent...\n");
@@ -292,12 +292,12 @@ void	run_ttt(t_server *s_info, t_game *g_info) {
 		if (g_info->turn == TURN_O)
 		{
 			process_input(s_info, g_info);
-			//process_wait(s_info, g_info);
+			process_wait(s_info, g_info);
 		}
 		else if (g_info->turn == TURN_X)
 		{
 			process_wait(s_info, g_info);
-			//process_input(s_info, g_info);
+			process_input(s_info, g_info);
 		}
 		else
 		{

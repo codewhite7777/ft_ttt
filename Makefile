@@ -24,14 +24,21 @@ OBJ_SERV		=	$(SRC_SERV:.c=.o)
 #NAME_SERV		=	$(addprefix $(DIR_SERV), sv)
 NAME_SERV		=	sv
 
-DIR_CLNT		=	./ft_ttt_client/
-SRC_LIST_CLNT	=	main.c \
-					client.c \
-					tictactoe.c
+DIR_CLNT		=	./ft_single_client/
+SRC_LIST_CLNT	=	tictactoe.c
 SRC_CLNT		=	$(addprefix $(DIR_CLNT), $(SRC_LIST_CLNT))
 OBJ_CLNT		=	$(SRC_CLNT:.c=.o)
-#NAME_CLNT		=	$(addprefix $(DIR_CLNT), cl)
+NAME_CLNT		=	$(addprefix $(DIR_CLNT), cl)
 NAME_CLNT		=	cl
+
+#DIR_CLNT		=	./ft_ttt_client/
+#SRC_LIST_CLNT	=	main.c \
+					client.c \
+					tictactoe.c
+#SRC_CLNT		=	$(addprefix $(DIR_CLNT), $(SRC_LIST_CLNT))
+#OBJ_CLNT		=	$(SRC_CLNT:.c=.o)
+#NAME_CLNT		=	$(addprefix $(DIR_CLNT), cl)
+#NAME_CLNT		=	cl
 
 %.o	:	%.c
 	$(CC) $(CFLAGS) -c $< -o $@
