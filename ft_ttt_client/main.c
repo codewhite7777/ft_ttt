@@ -78,7 +78,7 @@ void	process_input(t_server *s_info, t_game *g_info)
 	while (1)
     {
         input_coord(&(g_info->y), &(g_info->x));
-        if (check_range(g_info->y, g_info->x))
+        if (check_range(g_info->y - 1, g_info->x - 1))
         {
             printf("y: [%d], x: [%d]\n", g_info->y, g_info->x);
             printf("%s", ERR_MSG_RANGE);
