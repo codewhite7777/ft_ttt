@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mgo <mgo@student.42seoul.kr>               +#+  +:+       +#+         #
+#    By: alee <alee@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/24 07:58:27 by mgo               #+#    #+#              #
-#    Updated: 2022/08/24 07:58:29 by mgo              ###   ########.fr        #
+#    Updated: 2022/08/24 09:28:35 by alee             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,9 @@ $(NAME_SERV)	:	$(OBJ_SERV)
 $(NAME_CLNT)	:	$(OBJ_CLNT)
 	$(CC) $(CFLAGS) $(OBJ_CLNT) -o $(NAME_CLNT)
 
-all		:	$(NAME_CLNT) $(NAME_SERV)
+all		:	
+	$(NAME_CLNT)
+	$(NAME_SERV)
 
 c		:	$(NAME_CLNT)
 
