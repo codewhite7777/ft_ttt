@@ -74,15 +74,20 @@ void	recv_packet(t_server *s_info) {
 		memcpy(s_info->recv_buf, buf, (size_t)recv_ret);
         s_info->recv_buf[recv_ret] = '\0';
 		printf("value: [%s]\n", s_info->recv_buf);
-		if (!strcmp(s_info->recv_buf, PROTO_WIN_P1))
+		if (!strcmp((char *)(s_info->recv_buf), PROTO_WIN_P1))
 		{
-			printf("WIN 1\n");
-			exit(1);
+			print_ending(s_info->ptr_game, O_WIN);
+			exit(0);
 		}
-		if (!strcmp(s_info->recv_buf, PROTO_WIN_P2))
+		else if (!strcmp((char *)(s_info->recv_buf), PROTO_WIN_P2))
 		{
-			printf("WIN 2\n");
-			exit(1);
+			print_ending(s_info->ptr_game, X_WIN);
+			exit(0);
+		}
+		else if (!strcmp((char *)(s_info->recv_buf), PROTO_DRAW))
+		{
+			print_ending(s_info->ptr_game, DRAW);
+			exit(0);
 		}
 	}
 	return ;

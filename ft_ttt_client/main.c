@@ -173,6 +173,7 @@ void	init_game(t_server *s_info, t_game *g_info) {
 		printf("stone: [X]\n");
 	}
     g_info->state = NOT_END;
+	s_info->ptr_game = g_info;
 }
 
 int	main(void)
@@ -186,6 +187,6 @@ int	main(void)
 	printf("RUN----------\n");
 	run_ttt(&s_info, &g_info);
     close(s_info.sock);
-    print_ending(g_info.state);
+    print_ending(&g_info, g_info.state);
 	return (0);
 }

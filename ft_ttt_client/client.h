@@ -39,6 +39,7 @@ typedef struct s_server {
 	SOCKET				sock;
 	unsigned char	send_buf[PACKET_MAX];
 	unsigned char	recv_buf[PACKET_MAX];
+	struct s_game 	*ptr_game;
 }				t_server;
 
 enum e_stone {
@@ -73,7 +74,7 @@ void	set_proto_in_send_buf(t_server *s_info, t_game *g_info);
 void	clean_buf(unsigned char *buf);
 
 void	print_board(char board[][3]);
-void    print_ending(enum e_state state);
+void    print_ending(t_game *g_info, enum e_state state);
 void	input_coord(int *posy, int *posx);
 int		check_range(int ny, int nx);
 
