@@ -244,10 +244,11 @@ void	ft_tictactoe(t_server *p_server)
                     int y = p_server->c_session[i].r_buf[0] - ('0');
                     int x = p_server->c_session[i].r_buf[2] - ('0');
                     char ch = p_server->c_session[i].r_buf[4];
+                    memset(p_server->c_session[i].r_buf, 0, sizeof(p_server->c_session[i].r_buf));
                     printf("%d %d %d %c\n", y, x, ch, ch);
 
                     // 이미 존재한다면 리퀘스트 발송할 것
-                    if (check_already_board(visited, y - 1, x - 1))
+                    if (check_already_board(visited, y, x))
                     {
                         buildPacket(PROTO_REPOS, i, p_server);
                     }
@@ -257,9 +258,9 @@ void	ft_tictactoe(t_server *p_server)
                         visited[y - 1][x - 1] = 1;
                         char buf[12];
                         buf[0] = y + '0';
-                        buf[1] = '-';
+                        buf[1] = ' ';
                         buf[2] = x + '0';
-                        buf[3] = '-';
+                        buf[3] = ' ';
                         buf[4] = ch;
                         buf[5] = 0;
                         
@@ -267,23 +268,31 @@ void	ft_tictactoe(t_server *p_server)
                         int ret = check_game_state(stone);
                         if (ret !=  NOT_END)
                         {
-                            
                             if (ret == P1_WIN)
                             {
                                 // strcat(buf, PROTO_WIN_P1);
                                 // buildPacket(buf, i, p_server);
+                                // send(p_server->c_session[sock_idx].s_buf, );
+                                // buildPacket(buf, 0, p_server);
+                                // buildPacket(buf, 1, p_server);
+                                // buildPacket(buf, 0, p_server);
+                                // buildPacket(buf, 1, p_server);
                                 buildPacket(PROTO_WIN_P1, i, p_server);
                             }
                             else if (ret == P2_WIN)
                             {
                                 // strcat(buf, PROTO_WIN_P2);
                                 // buildPacket(buf, i, p_server);
+                                //buildPacket(buf, 0, p_server);
+                                //buildPacket(buf, 1, p_server);
                                 buildPacket(PROTO_WIN_P2, i, p_server);
                             }
                             else if (ret == DRAW)
                             {
                                 // strcat(buf, PROTO_DRAW);
                                 // buildPacket(buf, i, p_server);
+                                //buildPacket(buf, 0, p_server);
+                                //buildPacket(buf, 1, p_server);
                                 buildPacket(PROTO_DRAW, i, p_server);
                             }
                             // 진행중이 아니라면 누가이겼는지 발송 
@@ -293,11 +302,14 @@ void	ft_tictactoe(t_server *p_server)
                         }
                         else
                         {
+                            printf("test\n");
                             buildPacket(buf, 0, p_server);
                             buildPacket(buf, 1, p_server);
+                            memset(buf, 0, sizeof(buf));
+                            // stone = !stone;
                         }
                         // turn change ex) O -> X -> O
-                        stone = !stone;
+                        
                     }
                 }
             }
@@ -350,6 +362,8 @@ void	buildPacket(const char *packet_type, int sock_idx, t_server *p_server)
     strcmp(packet_type, PROTO_REPOS) == 0 || strcmp(packet_type, PROTO_O) == 0 ||
     strcmp(packet_type, PROTO_X) == 0 || strcmp(packet_type, PROTO_WIN_P1) == 0 ||
     strcmp(packet_type, PROTO_WIN_P2) == 0 || strcmp(packet_type, PROTO_DRAW) == 0)
+        insertPacket(p_server->c_session[sock_idx].s_buf, packet_type);
+    else
         insertPacket(p_server->c_session[sock_idx].s_buf, packet_type);
     printf("[%d] client sock, s_buf length : %lu \n", p_server->c_session[sock_idx].c_sock, strlen((const char *)p_server->c_session[sock_idx].s_buf));
     return ;

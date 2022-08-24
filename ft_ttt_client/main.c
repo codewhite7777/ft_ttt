@@ -50,8 +50,8 @@ int	check_protocol(char *str)
 
 void    get_coord_and_turn_from_recv_buf(t_server *s_info, t_game *g_info)
 {
-    g_info->x = s_info->recv_buf[0] - '0';
-    g_info->y = s_info->recv_buf[2] - '0';
+    g_info->y = s_info->recv_buf[0] - '0';
+    g_info->x = s_info->recv_buf[2] - '0';
     if (s_info->recv_buf[4] == 'O')
         g_info->now_turn = STONE_O;
     else if (s_info->recv_buf[4] == 'X')
@@ -61,9 +61,9 @@ void    get_coord_and_turn_from_recv_buf(t_server *s_info, t_game *g_info)
 void    set_stone_in_board(t_game *g_info)
 {
     if (g_info->now_turn == STONE_O)
-        g_info->board[g_info->y][g_info->x] = 'O';
+        g_info->board[g_info->y - 1][g_info->x - 1] = 'O';
     else if (g_info->now_turn == STONE_X)
-        g_info->board[g_info->y][g_info->x] = 'X';
+        g_info->board[g_info->y - 1][g_info->x - 1] = 'X';
 }
 
 void    set_board(t_server *s_info, t_game *g_info)
