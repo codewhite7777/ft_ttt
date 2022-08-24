@@ -75,7 +75,18 @@ void	recv_packet(t_server *s_info) {
 
 bool	check_recved_proto(t_server *s_info, char *proto) {
 	printf("recv_buf: [%s]\n", s_info->recv_buf);
-	if (strcmp((char *)s_info->recv_buf, proto) == 0) {
+	if (strncmp((char *)s_info->recv_buf, proto, strlen(proto)) == 0)
+	{
+		if (strlen((char *)(s_info->recv_buf)) > strlen(proto))
+		{
+			memmove(s_info->recv_buf, &(s_info->recv_buf[strlen(proto)]), strlen(proto));
+			s_info->recv_buf[strlen(proto)] = '\0';
+			printf("recv_buf after memmove: [%s]\n", s_info->recv_buf);
+		}
+		else
+		{
+			clean_buf(s_info->recv_buf);
+		}
 		return (true);
 	}
 	return (false);
