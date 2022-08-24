@@ -255,9 +255,9 @@ void print_board(char board[][3])
 void	draw_map(t_server *s_info, t_game *g_info)
 {
 	// recv_buf to coord
-	get_coord_from_recv_buf(s_info, g_info);
-	set_coord_in_board(g_info);
-	print_board(g_info->board);
+	//get_coord_from_recv_buf(s_info, g_info);
+	//set_coord_in_board(g_info);
+	//print_board(g_info->board);
 }
 
 void	process_input(t_server *s_info, t_game *g_info)
@@ -292,12 +292,12 @@ void	run_ttt(t_server *s_info, t_game *g_info) {
 		if (g_info->turn == TURN_O)
 		{
 			process_input(s_info, g_info);
-			process_wait(s_info, g_info);
+			//process_wait(s_info, g_info);
 		}
 		else if (g_info->turn == TURN_X)
 		{
 			process_wait(s_info, g_info);
-			process_input(s_info, g_info);
+			//process_input(s_info, g_info);
 		}
 		else
 		{
