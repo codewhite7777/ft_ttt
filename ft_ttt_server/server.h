@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:21 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 04:20:01 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 19:51:34 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef int SOCKET;
 typedef enum e_status
 {
 	START = 0,
+	SET_ROLE,
 	PLAY,
 	END,
 }			t_status;
@@ -50,6 +51,5 @@ void	disconnect(SOCKET c_sock, int sock_idx, t_server *p_server);
 
 void	insertPacket(unsigned char *buf, const char *packet_type);
 void	buildPacket(const char *packet_type, int sock_idx, t_server *p_server);
-void	broadcast(t_server *p_server);
 
 #endif

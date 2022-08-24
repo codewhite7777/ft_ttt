@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/24 04:04:09 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 04:10:12 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 20:25:37 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,8 @@
 # define PROTO_REPOS "- - R"
 # define PROTO_O    "- - O"
 # define PROTO_X    "- - X"
+# define PROTO_DRAW "- - D"
+# define PROTO_WIN_P1 "- - 1"
+# define PROTO_WIN_P2 "- - 2"
 
 #endif

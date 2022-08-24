@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 15:49:45 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 21:00:34 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,90 @@
 #include <stdio.h>
 #include <string.h>
 #include "packet_protocol.h"
+
+// hena
+int visited[3][3];
+char board[3][3];
+int count = 0;
+int stone = 0;
+
+
+int check_already_board(int visited[][3], int y, int x)
+{
+    if (visited[y - 1][x - 1])
+        return (1);
+    return (0);
+}
+
+
+int dy[] = {0, 1, 1, 1};
+int dx[] = {1, 1, 0, -1};
+
+int check_game_state(int stone, int count)
+{
+    char now;
+    stone == 0 ? (now = type1) : (now = type2);
+
+    printf("now :%c\n", now);
+    for (int i = 0 ; i < 3 ; ++i)
+    {
+        for (int j = 0 ; j < 3 ; ++j)
+        {
+            // cout << "here is now " << ' ' << i << ' ' << j  << '\n'; 
+            if ((i == 0 || j == 0) && board[i][j] == now)
+            {
+                // cout << "in \n";
+                int cnt = 1;
+                for (int d = 0 ; d < 4 ; ++d)
+                {
+                    int ny = i + dy[d];
+                    int nx = j + dx[d];
+                    
+                    // cout << ny << ' ' << nx << '\n';
+                    if (check_range(ny, nx) || board[ny][nx] != now)
+                        continue ;
+                    ny += dy[d];
+                    nx += dx[d];
+                    if (check_range(ny, nx) || board[ny][nx] != now)
+                        continue ;
+                    // cout << ny << ' ' << nx << '\n';
+                    if (board[ny][nx] != now)
+                        continue;
+                    else
+                    {
+                        if (!stone)
+                            return P1_WIN;
+                        else
+                            return P2_WIN;
+                    }
+                }
+            }
+        }
+    }
+    if (count == 9)
+        return DRAW;
+    return NOT_END;
+}
+
+int check_range(int ny, int nx)
+{
+    if (ny < 0 || ny >= 3 || nx < 0 || nx >= 3)
+        return (1);
+    return (0);
+}
+enum type
+{
+    type1 = (int)'O',
+    type2 = (int)'X'
+};
+
+enum state
+{
+    P1_WIN = 0,
+    P2_WIN = 1,
+    DRAW = 2,
+    NOT_END = 3
+};
 
 void  accept_client(t_server *p_server)
 {
@@ -138,16 +222,82 @@ void	ft_tictactoe(t_server *p_server)
         {
             buildPacket(PROTO_START, 0, p_server);//주어진 프로토콜에 대해 패킷을 생성하고, 클라이언트 send buffer에 패킷 정보 삽입
             buildPacket(PROTO_START, 1, p_server);
-            // printf("PROTO START send \n");
-            p_server->s_status = PLAY;//게임 상태 변경 (대기 -> 시작)
+            p_server->s_status = SET_ROLE;//게임 상태 변경 (대기 -> 시작)
+        }
+        else if (p_server->s_status == SET_ROLE)
+        {
+            buildPacket(PROTO_O, 0, p_server);
+            buildPacket(PROTO_X, 1, p_server);
+            p_server->s_status = PLAY;
         }
         else if (p_server->s_status == PLAY)
         {
-            buildPacket(PROTO_O, 0, p_server);//플레이어의 선공, 후공에 대한 패킷
-            buildPacket(PROTO_X, 1, p_server);
-            // printf("PROTO O, X send \n");
-            // p_server->s_status = END;
-            // printf("PLAY \n");
+            //1) 클라이언트 루프 -> strlen(r_buf) > 0 ? -> 임시 버퍼에 뽑아요
+            for (int i = 0; i < p_server->current_client; i++)
+            {
+                if (strlen(p_server->c_session[i].r_buf) > 0)
+                {                        
+                    // 1 1 O
+                    int y = p_server->c_session[i].r_buf[0] - ('0');
+                    int x = p_server->c_session[i].r_buf[2] - ('0');
+                    char ch = p_server->c_session[i].r_buf[4];
+
+                    // 이미 존재한다면 리퀘스트 발송할 것
+                    if (check_already_board(visited, y, x))
+                    {
+                        buildPacket(PROTO_REPOS, i, p_server);
+                    }
+                    else
+                    {
+                        count++;
+                        stone == 0 ? (board[y - 1][x - 1] = type1) : (board[y - 1][x - 1] = type2);
+                        visited[y - 1][x - 1] = 1;
+                        char buf[12];
+                        buf[0] = y + '0';
+                        buf[1] = '-';
+                        buf[2] = x + '0';
+                        buf[3] = '-';
+                        buf[4] = ch;
+                        buf[5] = 0;
+                        
+                        // Check game state
+                        int ret = check_game_state(stone, count);
+                        if (ret !=  NOT_END)
+                        {
+                            
+                            if (ret == P1_WIN)
+                            {
+                                // strcat(buf, PROTO_WIN_P1);
+                                // buildPacket(buf, i, p_server);
+                                buildPacket(PROTO_WIN_P1, i, p_server);
+                            }
+                            else if (ret == P2_WIN)
+                            {
+                                // strcat(buf, PROTO_WIN_P2);
+                                // buildPacket(buf, i, p_server);
+                                buildPacket(PROTO_WIN_P2, i, p_server);
+                            }
+                            else if (ret == DRAW)
+                            {
+                                // strcat(buf, PROTO_DRAW);
+                                // buildPacket(buf, i, p_server);
+                                buildPacket(PROTO_DRAW, i, p_server);
+                            }
+                            // 진행중이 아니라면 누가이겼는지 발송 
+
+                            //hena가 건들임
+                            p_server->s_status = END;           
+                        }
+                        else
+                        {
+                            buildPacket(buf, 0, p_server);
+                            buildPacket(buf, 1, p_server);
+                        }
+                        // turn change ex) O -> X -> O
+                        stone = !stone;
+                    }
+                }
+            }
         }
         else if (p_server->s_status == END)
         {
@@ -190,17 +340,11 @@ void	insertPacket(unsigned char *buf, const char *packet_type)
 
 void	buildPacket(const char *packet_type, int sock_idx, t_server *p_server)
 {
-    if (strcmp(packet_type, PROTO_START) == 0 || strcmp(packet_type, PROTO_END) == 0)
-        insertPacket(p_server->c_session[sock_idx].s_buf, packet_type);
-    if (strcmp(packet_type, PROTO_O) == 0 || strcmp(packet_type, PROTO_X) == 0)
+    if (strcmp(packet_type, PROTO_START) == 0 || strcmp(packet_type, PROTO_END) == 0 || 
+    strcmp(packet_type, PROTO_REPOS) == 0 || strcmp(packet_type, PROTO_O) == 0 ||
+    strcmp(packet_type, PROTO_X) == 0 || strcmp(packet_type, PROTO_WIN_P1) == 0 ||
+    strcmp(packet_type, PROTO_WIN_P2) == 0 || strcmp(packet_type, PROTO_DRAW) == 0)
         insertPacket(p_server->c_session[sock_idx].s_buf, packet_type);
     printf("[%d] client sock, s_buf length : %lu \n", p_server->c_session[sock_idx].c_sock, strlen((const char *)p_server->c_session[sock_idx].s_buf));
-    return ;
-}
-
-void	broadcast(t_server *p_server)
-{
-    for (int i = 0; i < p_server->current_client; i++)
-        sendPacket(p_server->c_session[i].c_sock, i, p_server);
     return ;
 }
