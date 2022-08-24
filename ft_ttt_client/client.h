@@ -22,6 +22,9 @@
 #include <arpa/inet.h>
 #include <stdbool.h>
 
+#define ERR_MSG_RANGE "not in range (1 ~ 3)\n"
+#define ERR_MSG_ALRDY "already in board\n"
+
 typedef int SOCKET;
 
 typedef enum e_packet
