@@ -57,14 +57,17 @@ typedef struct s_game {
 void	clean_infos(t_server *s_info, t_game *g_info);
 void	config_network(t_server *s_info);
 
+
 void	recv_packet(t_server *s_info);
 bool	check_recved_proto(t_server *s_info, char *proto);
+void	send_packet(t_server *s_info);
+void	set_proto_in_send_buf(t_server *s_info, t_game *g_info);
 void	clean_buf(unsigned char *buf);
 
 
-void ft_print_board(char board[][3]);
-void Input(int *posy, int *posx);
-int check_range(int ny, int nx);
+void	print_board(char board[][3]);
+void	input_coord(int *posy, int *posx);
+int		check_range(int ny, int nx);
 
 
 #endif

@@ -2,35 +2,61 @@
 #include <unistd.h>
 #include <string.h>
 
-const char * t1[10] = 
+
+int visited[3][3];
+char board[3][3];
+
+// default print
+// void print_board(char board[][3])
+// {
+//     for (int i = 0; i < 3; ++i)
+//     {
+//         for (int j = 0; j < 3; ++j)
+//         {
+//             if (!board[i][j])
+//                 printf("@");
+//             else
+//                 printf("%c", board[i][j]);
+//         }
+//         printf("\n");
+//     }
+//     printf("\n");
+// }
+
+
+const char * t1[] = 
 {
-    "     0000000000     ",
-    "  0000        0000  ",
-    " 0                0 ",
-    "0                  0",
-    "0                  0",
-    "0                  0",
-    "0                  0",
-    " 0                0 ",
-    "  0000        0000  ",
-    "     0000000000     ",
+    "\x1b[34m       000000       ",
+    "\x1b[34m    000      000    ",
+    "\x1b[34m  00            00  ",
+    "\x1b[34m 00              00 ",
+    "\x1b[34m00                00",
+    "\x1b[34m0                  0",
+    "\x1b[34m0                  0",
+    "\x1b[34m00                00",
+    "\x1b[34m 00              00 ",
+    "\x1b[34m  00            00  ",
+    "\x1b[34m    000      000    ",
+    "\x1b[34m       000000       ",
 };
 
-const char * t2[10] = 
+const char * t2[] = 
 {
-    "00                00",
-    " 000            000 ",
-    "   00          00   ",
-    "    0000    0000    ",
-    "        0000        ",
-    "        0000        ",
-    "    0000    0000    ",
-    "   00          00   ",
-    " 000            000 ",
-    "00                00"
+    "\x1b[31m                    ",
+    "\x1b[31m  0              0  ",
+    "\x1b[31m    0          0    ",
+    "\x1b[31m      0      0      ",
+    "\x1b[31m        0  0        ",
+    "\x1b[31m         00         ",
+    "\x1b[31m         00         ",
+    "\x1b[31m        0  0        ",
+    "\x1b[31m      0      0      ",
+    "\x1b[31m    0          0    ",
+    "\x1b[31m  0              0  ",
+    "\x1b[31m                    ",
 };
 
-const char * t3[10] = 
+const char * t3[] = 
 {
     "                    ",
     "                    ",
@@ -42,6 +68,138 @@ const char * t3[10] =
     "                    ",
     "                    ",
     "                    ",
+    "                    ",
+    "                    ",
+};
+
+const char * state[9][12] = 
+{
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "      0       0     ",
+        "     00      00     ",
+        "      0       0     ",
+        "      0       0     ",
+        "      0       0     ",
+        "      0       0     ",
+        "     000 ,   000    ",
+        "                    ",
+        "                    ",
+    },
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "      0      00     ",
+        "     00     0  0    ",
+        "      0        0    ",
+        "      0       0     ",
+        "      0      0      ",
+        "      0     0       ",
+        "     000 ,  0000    ",
+        "                    ",
+        "                    "
+    },
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "      0      00     ",
+        "     00     0  0    ",
+        "      0        0    ",
+        "      0      00     ",
+        "      0        0    ",
+        "      0     0  0    ",
+        "     000  ,  00     ",
+        "                    ",
+        "                    "
+    },
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "     00       0     ",
+        "    0  0     00     ",
+        "       0      0     ",
+        "      0       0     ",
+        "     0        0     ",
+        "    0         0     ",
+        "    0000 ,   000    ",
+        "                    ",
+        "                    "
+    },
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "     00      00     ",
+        "    0  0    0  0    ",
+        "       0       0    ",
+        "      0       0     ",
+        "     0       0      ",
+        "    0       0       ",
+        "    0000 ,  0000    ",
+        "                    ",
+        "                    "
+    },
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "     00      00     ",
+        "    0  0    0  0    ",
+        "       0       0    ",
+        "      0      00     ",
+        "     0         0    ",
+        "    0       0  0    ",
+        "    0000 ,   00     ",
+        "                    ",
+        "                    "
+    },
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "     00       0     ",
+        "    0  0     00     ",
+        "       0      0     ",
+        "     00       0     ",
+        "       0      0     ",
+        "    0  0      0     ",
+        "     00  ,   000    ",
+        "                    ",
+        "                    "
+    },
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "     00      00     ",
+        "    0  0    0  0    ",
+        "       0       0    ",
+        "     00       0     ",
+        "       0     0      ",
+        "    0  0    0       ",
+        "     00  ,  0000    ",
+        "                    ",
+        "                    "
+    },
+    {
+        "                    ",
+        "                    ",
+        "                    ",
+        "     00      00     ",
+        "    0  0    0  0    ",
+        "       0       0    ",
+        "     00      00     ",
+        "       0       0    ",
+        "    0  0    0  0    ",
+        "     00  ,   00     ",
+        "                    ",
+        "                    "
+    }
 };
 
 enum type
@@ -58,65 +216,50 @@ enum state
     NOT_END = 3
 };
 
-void ft_print_board(char board[][3])
+
+void ft_print_first()
 {
     for (int i = 0; i < 3; ++i)
     {
         
-        printf(" -------------------- -------------------- --------------------\n");
-        for (int y = 0 ; y < 10 ; ++y)
+        printf("\x1b[0m -------------------- -------------------- --------------------\n");
+        for (int y = 0 ; y < 12; ++y)
         {
-            printf("|");
+            printf("\x1b[0m|");
             for (int x = 0 ; x < 3 ; ++x)
             {
-            if (board[i][x] == type1)
-                printf("%s|", t1[y]);
-            else if (board[i][x] == type2)
-                printf("%s|", t2[y]);
-            else
-                printf("%s|", t3[y]);
+                printf("%s", state[3 *i + x][y]);
+                printf("\x1b[0m|");
             }
             printf("\n");
         }
     }
-    printf(" -------------------- -------------------- --------------------\n");
+    printf("\x1b[0m -------------------- -------------------- --------------------\n");
 }
 
-void Input(int *posy, int *posx)
-{
-    int y, x;
-    scanf("%d %d", &y, &x);
-    *posy = y;
-    *posx = x;
-}
-
-int check_range(int ny, int nx)
-{
-    if (ny < 0 || ny >= 3 || nx < 0 || nx >= 3)
-        return (1);
-    return (0);
-}
-
-
-/*
-int visited[3][3];
-char board[3][3];
-
-// default print
-void ft_print_board(char board[][3])
+void print_board(char board[][3])
 {
     for (int i = 0; i < 3; ++i)
     {
-        for (int j = 0; j < 3; ++j)
+        
+        printf("\x1b[0m -------------------- -------------------- --------------------\n");
+        for (int y = 0 ; y < 12; ++y)
         {
-            if (!board[i][j])
-                printf("@");
+            printf("\x1b[0m|");
+            for (int x = 0 ; x < 3 ; ++x)
+            {
+            if (board[i][x] == type1)
+                printf("%s", t1[y]);
+            else if (board[i][x] == type2)
+                printf("%s", t2[y]);
             else
-                printf("%c", board[i][j]);
+                printf("%s", state[3 * i + x][y]);
+            printf("\x1b[0m|");
+            }
+            printf("\n");
         }
-        printf("\n");
     }
-    printf("\n");
+    printf("\x1b[0m -------------------- -------------------- --------------------\n");
 }
 
 // upgrade print
@@ -129,19 +272,7 @@ int check_already_board(int visited[][3], int y, int x)
     return (0);
 }
 
-enum type
-{
-    type1 = (int)'O',
-    type2 = (int)'X'
-};
 
-enum state
-{
-    P1_WIN = 0,
-    P2_WIN = 1,
-    DRAW = 2,
-    NOT_END = 3
-};
 
 const char * errorMessage[2] = {
     "not in range (1 ~ 3)\n",
@@ -204,8 +335,7 @@ int check_game_state(bool stone, int count)
     return NOT_END;
 }
 
-
-void Input(int *posy, int *posx)
+void input_coord(int *posy, int *posx)
 {
     int y, x;
     scanf("%d %d", &y, &x);
@@ -232,26 +362,27 @@ int main()
     int flag;
     int y, x;
 
+    ft_print_first();
     while (true)
     {
         // Input
         Input(&y, &x);
-
+        
         // check valid Input
         if (check_range(y - 1, x - 1))
-            printf(errorMessage[0]);
+            printf("%s", errorMessage[0]);
         // Valid input case
         else
         {
             // Check if the stone already exists
             if (check_already_board(visited, y, x))
-                printf(errorMessage[1]);
+                printf("%s", errorMessage[1]);
             else
             {
                 count++;
                 stone == 0 ? board[y - 1][x - 1] = type1 : board[y - 1][x - 1] = type2;
                 visited[y - 1][x - 1] = 1;
-                ft_print_board(board);
+                print_board(board);
 
                 // Check game state
                 int ret = check_game_state(stone, count);
@@ -275,4 +406,3 @@ int main()
     else
         printf("%s",message1[flag]);
 }
-*/

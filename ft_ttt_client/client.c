@@ -93,6 +93,44 @@ bool	check_recved_proto(t_server *s_info, char *proto) {
 	return (false);
 }
 
+void	send_packet(t_server *s_info)
+{
+	int	ret_send;
+
+	ret_send = send(s_info->sock, s_info->send_buf, strlen((char *)(s_info->send_buf)), 0);
+	printf("ret_send: [%d]\n", ret_send);
+	if (ret_send == -1)
+	{
+		printf("send() failed\n");
+		exit(1);
+	}
+	else
+	{
+		clean_buf(s_info->send_buf);
+	}
+	return ;
+}
+
+void	set_proto_in_send_buf(t_server *s_info, t_game *g_info)
+{
+	if (strlen(s_info->send_buf) > 0)
+		clean_buf(s_info->send_buf);
+	s_info->send_buf[0] = '0' + g_info->x;
+	s_info->send_buf[1] = ' ';
+	s_info->send_buf[2] = '0' + g_info->y;
+	s_info->send_buf[3] = ' ';
+	if (g_info->turn == TURN_O)
+		s_info->send_buf[4] = 'O';
+	else if (g_info->turn == TURN_X)
+		s_info->send_buf[4] = 'X';
+	else
+	{
+		printf("unknown turn type\n");
+		eixt(1);
+	}
+	s_info->send_buf[5] = '\0';
+}
+
 void	clean_buf(unsigned char *buf) {
 	memset((void *)buf, 0x00, sizeof(buf));
 }
