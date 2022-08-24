@@ -59,8 +59,9 @@ void	init_game(t_server *s_info, t_game *g_info) {
 		printf("no start protocol in buffer...\n");
 	}
 	// turn protocol
-	clean_buf(s_info->recv_buf);
-	recv_packet(s_info);
+	//clean_buf(s_info->recv_buf);
+	if (strlen((char *)(s_info->recv_buf)) == 0)
+		recv_packet(s_info);
 	if (check_recved_proto(s_info, PROTO_O) == true)
 	{
 		g_info->turn = TURN_O;

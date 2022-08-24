@@ -52,9 +52,9 @@ void	recv_packet(t_server *s_info) {
 
 	if (strlen((char *)(s_info->recv_buf)) != 0)
 		clean_buf(s_info->recv_buf);
-	printf("recv_buf before recv(): [%s]\n", s_info->recv_buf);
+	printf("recv_buf before recv(): [%s]\n", s_info->recv_buf); // test
 	recv_ret = recv(s_info->sock, (void *)buf, sizeof(buf), 0);
-	printf("recv_ret: [%zd]\n", recv_ret);
+	printf("recv_ret: [%zd]\n", recv_ret); // test
 	if (recv_ret == -1)
 	{
 		printf("recv() failed\n");
@@ -74,18 +74,19 @@ void	recv_packet(t_server *s_info) {
 }
 
 bool	check_recved_proto(t_server *s_info, char *proto) {
-	printf("recv_buf: [%s]\n", s_info->recv_buf);
+	printf("recv_buf: [%s]\n", s_info->recv_buf); // test
 	if (strncmp((char *)s_info->recv_buf, proto, strlen(proto)) == 0)
 	{
 		if (strlen((char *)(s_info->recv_buf)) > strlen(proto))
 		{
 			memmove(s_info->recv_buf, &(s_info->recv_buf[strlen(proto)]), strlen(proto));
 			s_info->recv_buf[strlen(proto)] = '\0';
-			printf("recv_buf after memmove: [%s]\n", s_info->recv_buf);
+			printf("recv_buf after memmove: [%s]\n", s_info->recv_buf); // test
 		}
 		else
 		{
 			clean_buf(s_info->recv_buf);
+			printf("recv_buf after clean_buf() in check_recved_proto(): [%s]\n", s_info->recv_buf); // test
 		}
 		return (true);
 	}
