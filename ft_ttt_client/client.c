@@ -21,12 +21,17 @@ void	clean_infos(t_server *s_info, t_game *g_info)
 void	config_network(t_server *s_info) {
 	int	retval;
 
-	printf("Input server IP (-1 : 127.0.0.1): ");
-	scanf("%s", s_info->ip);
+	//printf("Input server IP (-1 : 127.0.0.1): ");
+	//scanf("%s", s_info->ip);
+	// s_info->ip = "-1"; // test
+	s_info->ip[0] = '-';
+	s_info->ip[1] = '1';
+	s_info->ip[2] = 0;
 	if (strcmp(s_info->ip, "-1") == 0)
 		strlcpy(s_info->ip, "127.0.0.1", sizeof(s_info->ip));
-	printf("Input server port: ");
-	scanf("%hd", &(s_info->port));
+	//printf("Input server port: ");
+	//scanf("%hd", &(s_info->port));
+	s_info->port = 4242; // test
 	printf("ip: %s, port: %d\n", s_info->ip, s_info->port); // test ip and port
 	s_info->sock = socket(AF_INET, SOCK_STREAM, 0);
 	s_info->addr_in.sin_family = AF_INET;
@@ -97,7 +102,8 @@ void	send_packet(t_server *s_info)
 {
 	int	ret_send;
 
-	ret_send = send(s_info->sock, s_info->send_buf, strlen((char *)(s_info->send_buf)), 0);
+	printf("sendbuf: [%s]\n", s_info->send_buf);
+	ret_send = send(s_info->sock, s_info->send_buf, strlen((char *)(s_info->send_buf)) + 1, 0);
 	printf("ret_send: [%d]\n", ret_send);
 	if (ret_send == -1)
 	{
@@ -113,24 +119,39 @@ void	send_packet(t_server *s_info)
 
 void	set_proto_in_send_buf(t_server *s_info, t_game *g_info)
 {
-	if (strlen(s_info->send_buf) > 0)
+	if (strlen((char *)(s_info->send_buf)) > 0)
 		clean_buf(s_info->send_buf);
-	s_info->send_buf[0] = '0' + g_info->x;
+	s_info->send_buf[0] = '0' + g_info->y;
 	s_info->send_buf[1] = ' ';
-	s_info->send_buf[2] = '0' + g_info->y;
+	s_info->send_buf[2] = '0' + g_info->x;
 	s_info->send_buf[3] = ' ';
-	if (g_info->turn == TURN_O)
+	if (g_info->stone == STONE_O)
 		s_info->send_buf[4] = 'O';
-	else if (g_info->turn == TURN_X)
+	else if (g_info->stone == STONE_X)
 		s_info->send_buf[4] = 'X';
-	else
-	{
-		printf("unknown turn type\n");
-		eixt(1);
-	}
 	s_info->send_buf[5] = '\0';
 }
 
 void	clean_buf(unsigned char *buf) {
 	memset((void *)buf, 0x00, sizeof(buf));
+}
+
+int check_range(int ny, int nx)
+{
+    if (ny < 0 || ny >= 3 || nx < 0 || nx >= 3)
+        return (1);
+    return (0);
+}
+
+void input_coord(int *coord_y, int *coord_x)
+{
+    int y, x;
+
+    printf("Input coordinate to put -> ");
+    scanf("%d %d", &y, &x);
+    *coord_y = y;
+    *coord_x = x;
+	
+	printf("y: [%d]\n", y);
+	printf("x: [%d]\n", x);
 }

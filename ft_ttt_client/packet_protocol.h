@@ -18,5 +18,8 @@
 # define PROTO_REPOS "- - R"
 # define PROTO_O    "- - O"
 # define PROTO_X    "- - X"
+# define PROTO_DRAW "- - D"
+# define PROTO_WIN_P1 "- - 1"
+# define PROTO_WIN_P2 "- - 2"
 
 #endif

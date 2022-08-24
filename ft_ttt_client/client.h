@@ -41,22 +41,30 @@ typedef struct s_server {
 	unsigned char	recv_buf[PACKET_MAX];
 }				t_server;
 
-enum e_turn {
-	TURN_O,
-	TURN_X,
+enum e_stone {
+	STONE_O,
+	STONE_X,
+};
+
+enum e_state
+{
+    NOT_END = 0,
+    O_WIN = 1,
+    X_WIN = 2,
+    DRAW = 3,
 };
 
 typedef struct s_game {
-	enum e_turn	turn;
-	char		board[3][3];
-	//int			visited[3][3];
-	int			x;
-	int			y;
+	enum e_stone	stone;
+	enum e_stone	now_turn;
+	int				x;
+	int				y;
+	char			board[3][3];
+	enum e_state	state;
 }		t_game;
 
 void	clean_infos(t_server *s_info, t_game *g_info);
 void	config_network(t_server *s_info);
-
 
 void	recv_packet(t_server *s_info);
 bool	check_recved_proto(t_server *s_info, char *proto);
@@ -64,10 +72,9 @@ void	send_packet(t_server *s_info);
 void	set_proto_in_send_buf(t_server *s_info, t_game *g_info);
 void	clean_buf(unsigned char *buf);
 
-
 void	print_board(char board[][3]);
+void    print_ending(enum e_state state);
 void	input_coord(int *posy, int *posx);
 int		check_range(int ny, int nx);
-
 
 #endif

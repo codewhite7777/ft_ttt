@@ -19,12 +19,32 @@
 #include <string.h>
 #include "packet_protocol.h"
 
+enum type
+{
+    type1 = (int)'O',
+    type2 = (int)'X'
+};
+
+enum state
+{
+    P1_WIN = 0,
+    P2_WIN = 1,
+    DRAW = 2,
+    NOT_END = 3
+};
+
 // hena
 int visited[3][3];
 char board[3][3];
 int count = 0;
 int stone = 0;
 
+int check_range(int ny, int nx)
+{
+    if (ny < 0 || ny >= 3 || nx < 0 || nx >= 3)
+        return (1);
+    return (0);
+}
 
 int check_already_board(int visited[][3], int y, int x)
 {
@@ -32,7 +52,6 @@ int check_already_board(int visited[][3], int y, int x)
         return (1);
     return (0);
 }
-
 
 int dy[] = {0, 1, 1, 1};
 int dx[] = {1, 1, 0, -1};
@@ -82,26 +101,6 @@ int check_game_state(int stone, int count)
         return DRAW;
     return NOT_END;
 }
-
-int check_range(int ny, int nx)
-{
-    if (ny < 0 || ny >= 3 || nx < 0 || nx >= 3)
-        return (1);
-    return (0);
-}
-enum type
-{
-    type1 = (int)'O',
-    type2 = (int)'X'
-};
-
-enum state
-{
-    P1_WIN = 0,
-    P2_WIN = 1,
-    DRAW = 2,
-    NOT_END = 3
-};
 
 void  accept_client(t_server *p_server)
 {
@@ -235,7 +234,7 @@ void	ft_tictactoe(t_server *p_server)
             //1) 클라이언트 루프 -> strlen(r_buf) > 0 ? -> 임시 버퍼에 뽑아요
             for (int i = 0; i < p_server->current_client; i++)
             {
-                if (strlen(p_server->c_session[i].r_buf) > 0)
+                if (strlen((char *)(p_server->c_session[i].r_buf)) > 0)
                 {                        
                     // 1 1 O
                     int y = p_server->c_session[i].r_buf[0] - ('0');

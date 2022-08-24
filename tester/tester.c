@@ -34,7 +34,6 @@ void	print_fail(char *line)
 	printf("%s\n", line);
 }
 
-
 int check_space(char *line)
 {
 	if (line[1] == ' ' && line[3] == ' ')
