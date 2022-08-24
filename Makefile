@@ -6,7 +6,7 @@
 #    By: alee <alee@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/24 07:58:27 by mgo               #+#    #+#              #
-#    Updated: 2022/08/24 09:28:35 by alee             ###   ########.fr        #
+#    Updated: 2022/08/24 10:01:58 by alee             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ SRC_LIST_SERV	=	main.c \
 					server.c
 SRC_SERV		=	$(addprefix $(DIR_SERV), $(SRC_LIST_SERV))
 OBJ_SERV		=	$(SRC_SERV:.c=.o)
-NAME_SERV		=	$(addprefix $(DIR_SERV), sv)
+#NAME_SERV		=	$(addprefix $(DIR_SERV), sv)
+NAME_SERV		=	sv
 
 DIR_CLNT		=	./ft_ttt_client/
 SRC_LIST_CLNT	=	main.c \
@@ -29,7 +30,8 @@ SRC_LIST_CLNT	=	main.c \
 					tictactoe.c
 SRC_CLNT		=	$(addprefix $(DIR_CLNT), $(SRC_LIST_CLNT))
 OBJ_CLNT		=	$(SRC_CLNT:.c=.o)
-NAME_CLNT		=	$(addprefix $(DIR_CLNT), cl)
+#NAME_CLNT		=	$(addprefix $(DIR_CLNT), cl)
+NAME_CLNT		=	cl
 
 %.o	:	%.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -40,9 +42,7 @@ $(NAME_SERV)	:	$(OBJ_SERV)
 $(NAME_CLNT)	:	$(OBJ_CLNT)
 	$(CC) $(CFLAGS) $(OBJ_CLNT) -o $(NAME_CLNT)
 
-all		:	
-	$(NAME_CLNT)
-	$(NAME_SERV)
+all		:	$(NAME_CLNT) $(NAME_SERV)
 
 c		:	$(NAME_CLNT)
 

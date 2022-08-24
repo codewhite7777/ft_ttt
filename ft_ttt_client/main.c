@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/24 04:16:46 by mgo               #+#    #+#             */
-/*   Updated: 2022/08/24 07:47:41 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 10:10:33 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	run_ttt(t_server *s_info, t_client *c_info) {
 
 	// wait for starting
 	retval = recv(s_info->sock, (void *)s_info->recv_buf, sizeof(s_info->recv_buf), 0);
+	printf("recv [%d]byte \n", retval);
 	if (retval == -1)
 		printf("recv() failed\n");
 	if (strcmp((char *)s_info->recv_buf, "- - S") == 0) {

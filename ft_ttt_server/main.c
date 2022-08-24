@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:48:47 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 03:52:09 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 09:46:58 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ int	main(void)
 		printf("Err : listen(...) \n");
 		exit(1);
 	}
-	
 	printf("server ip : %s, port : %d \n", server.s_ip, server.s_port);
 	printf("run \n");
 	while (1)

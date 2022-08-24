@@ -6,7 +6,7 @@
 /*   By: alee <alee@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 22:18:18 by alee              #+#    #+#             */
-/*   Updated: 2022/08/24 09:45:14 by alee             ###   ########.fr       */
+/*   Updated: 2022/08/24 10:03:40 by alee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,8 +178,12 @@ void	disconnect(SOCKET c_sock, int sock_idx, t_server *p_server)
 
 void	insertPacket(unsigned char *buf, const char *packet_type)
 {
-    memcpy(buf, packet_type, strlen(packet_type) + 1);
+    bzero(buf, PACKET_MAX);
+    memcpy(buf, packet_type, strlen(packet_type));
     buf[strlen(packet_type)] = '\0';
+    printf("insert Packet length : [%d] \n", strlen(packet_type));
+    for (int i = 0; i < strlen((char *)buf); i++)
+        printf("[%c]", buf[i]);
     return ;
 }
 
