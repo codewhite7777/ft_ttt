@@ -36,7 +36,6 @@ enum state
 // hena
 int visited[3][3];
 char board[3][3];
-int count = 0;
 int stone = 0;
 
 int check_range(int ny, int nx)
@@ -56,7 +55,7 @@ int check_already_board(int visited[][3], int y, int x)
 int dy[] = {0, 1, 1, 1};
 int dx[] = {1, 1, 0, -1};
 
-int check_game_state(int stone, int count)
+int check_game_state(int stone)
 {
     char now;
     stone == 0 ? (now = type1) : (now = type2);
@@ -97,6 +96,11 @@ int check_game_state(int stone, int count)
             }
         }
     }
+    int count = 0;
+    for (int i = 0 ; i < 3 ; ++i)
+        for (int j = 0 ; j < 3 ; ++j)
+            if (visited[i][j])
+                count++;
     if (count == 9)
         return DRAW;
     return NOT_END;
@@ -240,15 +244,15 @@ void	ft_tictactoe(t_server *p_server)
                     int y = p_server->c_session[i].r_buf[0] - ('0');
                     int x = p_server->c_session[i].r_buf[2] - ('0');
                     char ch = p_server->c_session[i].r_buf[4];
+                    printf("%d %d %d %c\n", y, x, ch, ch);
 
                     // 이미 존재한다면 리퀘스트 발송할 것
-                    if (check_already_board(visited, y, x))
+                    if (check_already_board(visited, y - 1, x - 1))
                     {
                         buildPacket(PROTO_REPOS, i, p_server);
                     }
                     else
                     {
-                        count++;
                         stone == 0 ? (board[y - 1][x - 1] = type1) : (board[y - 1][x - 1] = type2);
                         visited[y - 1][x - 1] = 1;
                         char buf[12];
@@ -260,7 +264,7 @@ void	ft_tictactoe(t_server *p_server)
                         buf[5] = 0;
                         
                         // Check game state
-                        int ret = check_game_state(stone, count);
+                        int ret = check_game_state(stone);
                         if (ret !=  NOT_END)
                         {
                             
